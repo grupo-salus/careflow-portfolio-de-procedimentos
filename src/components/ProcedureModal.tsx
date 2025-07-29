@@ -29,22 +29,23 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  if (!isOpen || !procedure) return null;
-
   const [simulationParams, setSimulationParams] = useState({
-    precoSessao: procedure.precoSugerido,
-    numeroSessoes: procedure.numeroSessoes,
+    precoSessao: procedure?.precoSugerido || 0,
+    numeroSessoes: procedure?.numeroSessoes || 1,
   });
 
   // Atualizar parâmetros quando o procedimento mudar
   useEffect(() => {
-    setSimulationParams({
-      precoSessao: procedure.precoSugerido,
-      numeroSessoes: procedure.numeroSessoes,
-    });
+    if (procedure) {
+      setSimulationParams({
+        precoSessao: procedure.precoSugerido,
+        numeroSessoes: procedure.numeroSessoes,
+      });
+    }
   }, [procedure]);
 
   const simulationResult = useMemo(() => {
+    if (!procedure) return null;
     try {
       return calcularMargemContribuicao({
         precoSessao: simulationParams.precoSessao,
@@ -58,10 +59,12 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
     }
   }, [simulationParams, procedure]);
 
-  const totalInsumosCost = procedure.insumos.reduce(
-    (total, insumo) => total + insumo.valor,
-    0
-  );
+  const totalInsumosCost = useMemo(() => {
+    if (!procedure) return 0;
+    return procedure.insumos.reduce((total, insumo) => total + insumo.valor, 0);
+  }, [procedure]);
+
+  if (!isOpen || !procedure) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">

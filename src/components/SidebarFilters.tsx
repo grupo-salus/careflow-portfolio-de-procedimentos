@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Filter, X, Tag, Clock, DollarSign } from "lucide-react";
+import { Search, Filter, Tag, Clock, DollarSign } from "lucide-react";
 import { FilterState } from "../types/procedure";
 import LabelIcon from "./LabelIcon";
 
@@ -54,37 +54,17 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
       {/* Sidebar */}
       <div
         className={`
-          fixed lg:relative lg:translate-x-0 inset-y-0 left-0 z-50 w-80 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out
+          fixed lg:absolute inset-y-0 left-0 z-50 w-80 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <Filter
-              className="w-5 h-5"
-              style={{
-                background:
-                  "linear-gradient(120deg, #683FE7 15%, #CA2CB2 50%, #FD9010 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            />
-            Filtros
-          </h2>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={clearFilters}
-              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              Limpar
-            </button>
-            <button
-              onClick={onToggle}
-              className="lg:hidden p-1 hover:bg-gray-100 rounded text-gray-600"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+        <div className="flex items-center justify-center p-6 border-b border-gray-200">
+          {/* Logo Careflow */}
+          <img
+            src="/careflow.png"
+            alt="Careflow Logo"
+            className="h-8 w-auto"
+          />
         </div>
 
         <div className="p-6 overflow-y-auto h-full pb-20">

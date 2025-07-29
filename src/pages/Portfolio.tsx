@@ -60,14 +60,15 @@ const Portfolio: React.FC = () => {
   const totalProcedures = filteredProcedures.length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="h-full bg-gray-50 flex flex-col">
       <HeaderToggle
         currentView={currentView}
         onViewChange={setCurrentView}
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        isSidebarOpen={isSidebarOpen}
       />
 
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         <SidebarFilters
           filters={filters}
           onFiltersChange={setFilters}
@@ -78,7 +79,11 @@ const Portfolio: React.FC = () => {
           onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
         />
 
-        <main className="flex-1 p-6">
+        <main
+          className={`transition-all duration-300 p-6 overflow-y-auto ${
+            isSidebarOpen ? "lg:ml-80" : "ml-0"
+          } flex-1`}
+        >
           <div className="mb-6">
             <div>
               <h2 className="text-xl font-semibold text-gray-900">

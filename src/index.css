@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Reset CSS to prevent unwanted scroll */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
 /* Careflow Brand Colors */
 :root {
   --careflow-primary: #8b5cf6;

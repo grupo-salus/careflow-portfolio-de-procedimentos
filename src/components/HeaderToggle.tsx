@@ -1,20 +1,26 @@
 import React from "react";
-import { DollarSign, TrendingUp, Menu, Briefcase } from "lucide-react";
+import { DollarSign, TrendingUp, Briefcase } from "lucide-react";
 import { ViewType } from "../types/procedure";
 
 interface HeaderToggleProps {
   currentView: ViewType;
   onViewChange: (view: ViewType) => void;
   onToggleSidebar: () => void;
+  isSidebarOpen: boolean;
 }
 
 const HeaderToggle: React.FC<HeaderToggleProps> = ({
   currentView,
   onViewChange,
   onToggleSidebar,
+  isSidebarOpen,
 }) => {
   return (
-    <div className="bg-white border-b border-gray-200 px-6 py-3">
+    <div
+      className={`bg-white border-b border-gray-200 px-1 py-3 transition-all duration-300 ${
+        isSidebarOpen ? "lg:ml-80" : "ml-0"
+      }`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           {/* Menu Burger */}
@@ -22,17 +28,37 @@ const HeaderToggle: React.FC<HeaderToggleProps> = ({
             onClick={onToggleSidebar}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <Menu className="w-5 h-5 text-gray-600" />
+            <svg
+              className={`w-6 h-6 transition-transform duration-300 ${
+                isSidebarOpen ? "rotate-90" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isSidebarOpen ? (
+                // X icon
+                <>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </>
+              ) : (
+                // Hamburger icon
+                <>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </>
+              )}
+            </svg>
           </button>
-
-          {/* Logo Careflow */}
-          <div className="flex items-center">
-            <img
-              src="/careflow.png"
-              alt="Careflow Logo"
-              className="h-8 w-auto"
-            />
-          </div>
 
           {/* Title with Icon */}
           <div className="flex items-center gap-3">
