@@ -1,5 +1,12 @@
 import React from "react";
-import { Search, Filter, Tag, Clock, DollarSign } from "lucide-react";
+import {
+  Search,
+  Filter,
+  Tag,
+  Clock,
+  DollarSign,
+  RotateCcw,
+} from "lucide-react";
 import { FilterState } from "../types/procedure";
 import LabelIcon from "./LabelIcon";
 
@@ -41,6 +48,17 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
     onFiltersChange({ ...filters, selectedLabels: newLabels });
   };
 
+  const hasActiveFilters = () => {
+    return (
+      filters.searchTerm !== "" ||
+      filters.selectedLabels.length > 0 ||
+      filters.tempoMin !== timeRange[0] ||
+      filters.tempoMax !== timeRange[1] ||
+      filters.precoMin !== priceRange[0] ||
+      filters.precoMax !== priceRange[1]
+    );
+  };
+
   return (
     <>
       {/* Mobile overlay */}
@@ -64,6 +82,31 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
         </div>
 
         <div className="p-6 overflow-y-auto h-full pb-20">
+          {/* Header with Clear Filters Button */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <Filter
+                className="w-5 h-5"
+                style={{
+                  background:
+                    "linear-gradient(120deg, #683FE7 15%, #CA2CB2 50%, #FD9010 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              />
+              Filtros
+            </h2>
+            {hasActiveFilters() && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-all duration-200"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Limpar
+              </button>
+            )}
+          </div>
+
           {/* Search */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -79,15 +122,15 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                   WebkitTextFillColor: "transparent",
                 }}
               />
-                             <input
-                 type="text"
-                 value={filters.searchTerm}
-                 onChange={(e) =>
-                   onFiltersChange({ ...filters, searchTerm: e.target.value })
-                 }
-                 placeholder="Digite o nome do procedimento..."
-                 className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 transition-all duration-200 hover:bg-white hover:border-gray-300 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
-               />
+              <input
+                type="text"
+                value={filters.searchTerm}
+                onChange={(e) =>
+                  onFiltersChange({ ...filters, searchTerm: e.target.value })
+                }
+                placeholder="Digite o nome do procedimento..."
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 transition-all duration-200 hover:bg-white hover:border-gray-300 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+              />
             </div>
           </div>
 
@@ -152,9 +195,27 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
             </label>
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-gray-500">
-                  Mínimo: {filters.tempoMin} min
-                </label>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-xs text-gray-500">Mínimo:</label>
+                  <input
+                    type="number"
+                    min={timeRange[0]}
+                    max={timeRange[1]}
+                    value={filters.tempoMin}
+                    onChange={(e) => {
+                      const value = Math.max(
+                        timeRange[0],
+                        Math.min(timeRange[1], Number(e.target.value))
+                      );
+                      onFiltersChange({
+                        ...filters,
+                        tempoMin: value,
+                      });
+                    }}
+                    className="w-16 px-2 py-1 text-xs border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
+                  />
+                  <span className="text-xs text-gray-500">min</span>
+                </div>
                 <input
                   type="range"
                   min={timeRange[0]}
@@ -166,16 +227,34 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                       tempoMin: Number(e.target.value),
                     })
                   }
-                  className="w-full mt-1"
+                  className="w-full"
                   style={{
                     accentColor: "var(--careflow-primary)",
                   }}
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500">
-                  Máximo: {filters.tempoMax} min
-                </label>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-xs text-gray-500">Máximo:</label>
+                  <input
+                    type="number"
+                    min={timeRange[0]}
+                    max={timeRange[1]}
+                    value={filters.tempoMax}
+                    onChange={(e) => {
+                      const value = Math.max(
+                        timeRange[0],
+                        Math.min(timeRange[1], Number(e.target.value))
+                      );
+                      onFiltersChange({
+                        ...filters,
+                        tempoMax: value,
+                      });
+                    }}
+                    className="w-16 px-2 py-1 text-xs border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
+                  />
+                  <span className="text-xs text-gray-500">min</span>
+                </div>
                 <input
                   type="range"
                   min={timeRange[0]}
@@ -187,7 +266,7 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                       tempoMax: Number(e.target.value),
                     })
                   }
-                  className="w-full mt-1"
+                  className="w-full"
                   style={{
                     accentColor: "var(--careflow-primary)",
                   }}
@@ -212,9 +291,27 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
             </label>
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-gray-500">
-                  Mínimo: R$ {filters.precoMin.toFixed(0)}
-                </label>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-xs text-gray-500">Mínimo:</label>
+                  <input
+                    type="number"
+                    min={priceRange[0]}
+                    max={priceRange[1]}
+                    value={filters.precoMin}
+                    onChange={(e) => {
+                      const value = Math.max(
+                        priceRange[0],
+                        Math.min(priceRange[1], Number(e.target.value))
+                      );
+                      onFiltersChange({
+                        ...filters,
+                        precoMin: value,
+                      });
+                    }}
+                    className="w-20 px-2 py-1 text-xs border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
+                  />
+                  <span className="text-xs text-gray-500">R$</span>
+                </div>
                 <input
                   type="range"
                   min={priceRange[0]}
@@ -226,16 +323,34 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                       precoMin: Number(e.target.value),
                     })
                   }
-                  className="w-full mt-1"
+                  className="w-full"
                   style={{
                     accentColor: "var(--careflow-primary)",
                   }}
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500">
-                  Máximo: R$ {filters.precoMax.toFixed(0)}
-                </label>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-xs text-gray-500">Máximo:</label>
+                  <input
+                    type="number"
+                    min={priceRange[0]}
+                    max={priceRange[1]}
+                    value={filters.precoMax}
+                    onChange={(e) => {
+                      const value = Math.max(
+                        priceRange[0],
+                        Math.min(priceRange[1], Number(e.target.value))
+                      );
+                      onFiltersChange({
+                        ...filters,
+                        precoMax: value,
+                      });
+                    }}
+                    className="w-20 px-2 py-1 text-xs border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
+                  />
+                  <span className="text-xs text-gray-500">R$</span>
+                </div>
                 <input
                   type="range"
                   min={priceRange[0]}
@@ -247,7 +362,7 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                       precoMax: Number(e.target.value),
                     })
                   }
-                  className="w-full mt-1"
+                  className="w-full"
                   style={{
                     accentColor: "var(--careflow-primary)",
                   }}
