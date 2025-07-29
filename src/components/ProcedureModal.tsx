@@ -152,14 +152,9 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
                 {procedure.labels.map((label, index) => (
                   <div
                     key={index}
-                    className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border"
-                    style={{
-                      background: "var(--careflow-gradient)",
-                      color: "white",
-                      borderColor: "transparent",
-                    }}
+                    className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium"
                   >
-                    <LabelIcon label={label} size="sm" className="text-white" />
+                    <LabelIcon label={label} size="sm" />
                     <span className="capitalize">{label}</span>
                   </div>
                 ))}
