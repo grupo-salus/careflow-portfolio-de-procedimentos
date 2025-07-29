@@ -1,27 +1,35 @@
-import React, { useState, useMemo } from 'react';
-import { Menu } from 'lucide-react';
-import { ViewType, FilterState, Procedure } from '../types/procedure';
-import { filterProcedures, groupProceduresByType, getAllLabels, getPriceRange, getTimeRange } from '../utils/filters';
-import HeaderToggle from '../components/HeaderToggle';
-import SidebarFilters from '../components/SidebarFilters';
-import AccordionGroup from '../components/AccordionGroup';
-import ProcedureModal from '../components/ProcedureModal';
-import proceduresData from '../data/procedures.json';
+import React, { useState, useMemo } from "react";
+import { Menu } from "lucide-react";
+import { ViewType, FilterState, Procedure } from "../types/procedure";
+import {
+  filterProcedures,
+  groupProceduresByType,
+  getAllLabels,
+  getPriceRange,
+  getTimeRange,
+} from "../utils/filters";
+import HeaderToggle from "../components/HeaderToggle";
+import SidebarFilters from "../components/SidebarFilters";
+import AccordionGroup from "../components/AccordionGroup";
+import ProcedureModal from "../components/ProcedureModal";
+import proceduresData from "../data/procedures.json";
 
 const Portfolio: React.FC = () => {
-  const [currentView, setCurrentView] = useState<ViewType>('financeiro');
-  const [selectedProcedure, setSelectedProcedure] = useState<Procedure | null>(null);
+  const [currentView, setCurrentView] = useState<ViewType>("financeiro");
+  const [selectedProcedure, setSelectedProcedure] = useState<Procedure | null>(
+    null
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   const procedures = proceduresData as Procedure[];
-  
+
   const priceRange = useMemo(() => getPriceRange(procedures), [procedures]);
   const timeRange = useMemo(() => getTimeRange(procedures), [procedures]);
   const availableLabels = useMemo(() => getAllLabels(procedures), [procedures]);
 
   const [filters, setFilters] = useState<FilterState>({
-    searchTerm: '',
+    searchTerm: "",
     selectedLabels: [],
     tempoMin: timeRange[0],
     tempoMax: timeRange[1],
@@ -29,13 +37,13 @@ const Portfolio: React.FC = () => {
     precoMax: priceRange[1],
   });
 
-  const filteredProcedures = useMemo(() => 
-    filterProcedures(procedures, filters), 
+  const filteredProcedures = useMemo(
+    () => filterProcedures(procedures, filters),
     [procedures, filters]
   );
 
-  const groupedProcedures = useMemo(() => 
-    groupProceduresByType(filteredProcedures, currentView), 
+  const groupedProcedures = useMemo(
+    () => groupProceduresByType(filteredProcedures, currentView),
     [filteredProcedures, currentView]
   );
 
@@ -53,9 +61,10 @@ const Portfolio: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <HeaderToggle 
-        currentView={currentView} 
-        onViewChange={setCurrentView} 
+      <HeaderToggle
+        currentView={currentView}
+        onViewChange={setCurrentView}
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
       <div className="flex">
@@ -70,22 +79,17 @@ const Portfolio: React.FC = () => {
         />
 
         <main className="flex-1 p-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6">
             <div>
               <h2 className="text-xl font-semibold text-gray-900">
-                Visão {currentView === 'financeiro' ? 'Financeira' : 'Comercial'}
+                Visão{" "}
+                {currentView === "financeiro" ? "Financeira" : "Comercial"}
               </h2>
               <p className="text-sm text-gray-600 mt-1">
-                {totalProcedures} procedimento{totalProcedures !== 1 ? 's' : ''} encontrado{totalProcedures !== 1 ? 's' : ''}
+                {totalProcedures} procedimento{totalProcedures !== 1 ? "s" : ""}{" "}
+                encontrado{totalProcedures !== 1 ? "s" : ""}
               </p>
             </div>
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <Menu className="w-4 h-4" />
-              Filtros
-            </button>
           </div>
 
           {totalProcedures === 0 ? (
@@ -93,20 +97,26 @@ const Portfolio: React.FC = () => {
               <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
                 <Menu className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum procedimento encontrado</h3>
-              <p className="text-gray-600">Tente ajustar os filtros para encontrar procedimentos.</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Nenhum procedimento encontrado
+              </h3>
+              <p className="text-gray-600">
+                Tente ajustar os filtros para encontrar procedimentos.
+              </p>
             </div>
           ) : (
             <div className="space-y-6">
-              {Object.entries(groupedProcedures).map(([groupTitle, groupProcedures], index) => (
-                <AccordionGroup
-                  key={groupTitle}
-                  title={groupTitle}
-                  procedures={groupProcedures}
-                  onProcedureClick={handleProcedureClick}
-                  defaultOpen={index === 0}
-                />
-              ))}
+              {Object.entries(groupedProcedures).map(
+                ([groupTitle, groupProcedures], index) => (
+                  <AccordionGroup
+                    key={groupTitle}
+                    title={groupTitle}
+                    procedures={groupProcedures}
+                    onProcedureClick={handleProcedureClick}
+                    defaultOpen={index === 0}
+                  />
+                )
+              )}
             </div>
           )}
         </main>

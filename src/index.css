@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Careflow Brand Colors */
+:root {
+  --careflow-primary: #8b5cf6;
+  --careflow-secondary: #a855f7;
+  --careflow-purple: #8b5cf6;
+  --careflow-orange: #f97316;
+}
+
 /* Custom scrollbar styles */
 .scrollbar-thin {
   scrollbar-width: thin;
