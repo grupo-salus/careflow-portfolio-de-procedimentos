@@ -1,0 +1,300 @@
+[
+  {
+    "id": 6,
+    "nome": "Toxina Botulínica XEOMIN (100ui)",
+    "precoSugerido": 935.0,
+    "numeroSessoes": 1,
+    "tempoSessaoMin": 30,
+    "descricao": "A toxina botulínica, comercialmente conhecida como Xeomin, é utilizada para relaxar os músculos faciais que causam rugas de expressão, como as linhas da testa, pés de galinha e rugas entre as sobrancelhas. O procedimento é minimamente invasivo e resulta em uma aparência mais rejuvenescida e descansada. A unidade de 100ui (unidades internacionais) é versátil para tratar diferentes áreas da face, dependendo da necessidade do paciente.",
+    "tipoFinanceiro": "Alto Ticket",
+    "tipoComercial": "Recorrência",
+    "insumos": [
+      {
+        "nome": "Toxina botulínica Xeomin 100ui",
+        "valor": 500.0
+      },
+      {
+        "nome": "Flaconete de soro estéril",
+        "valor": 0.8
+      },
+      {
+        "nome": "Seringa 1 ml c/ Agulha 13x30",
+        "valor": 1.52
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Lápis de marcação",
+        "valor": 5.79
+      },
+      {
+        "nome": "Gase",
+        "valor": 0.2
+      },
+      {
+        "nome": "Álcool 70%",
+        "valor": 0.06
+      }
+    ],
+    "custoProfissionalPorSessao": 21.68,
+    "labels": [
+      "rejuvenescimento",
+      "rugas",
+      "linhas de expressão",
+      "rosto",
+      "testa",
+      "olhos",
+      "beleza",
+      "agulha"
+    ]
+  },
+  {
+    "id": 7,
+    "nome": "Preenchimento Labial (1ml Ácido Hialurônico)",
+    "precoSugerido": 1200.0,
+    "numeroSessoes": 1,
+    "tempoSessaoMin": 45,
+    "descricao": "O preenchimento labial com ácido hialurônico é um procedimento que visa aumentar o volume, definir o contorno e melhorar a hidratação dos lábios. Utiliza-se 1ml de ácido hialurônico, uma substância segura e absorvível pelo organismo, para obter resultados naturais e harmoniosos. É ideal para quem busca lábios mais definidos e volumosos.",
+    "tipoFinanceiro": "Alto Ticket",
+    "tipoComercial": "Recorrência",
+    "insumos": [
+      {
+        "nome": "Ácido Hialurônico (1ml)",
+        "valor": 450.0
+      },
+      {
+        "nome": "Anestésico tópico",
+        "valor": 15.0
+      },
+      {
+        "nome": "Cânula para preenchimento",
+        "valor": 25.0
+      },
+      {
+        "nome": "Seringa 1 ml",
+        "valor": 1.5
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Gase",
+        "valor": 0.2
+      },
+      {
+        "nome": "Álcool 70%",
+        "valor": 0.06
+      }
+    ],
+    "custoProfissionalPorSessao": 200.0,
+    "labels": [
+      "volume",
+      "lábios",
+      "contorno labial",
+      "hidratação",
+      "ácido hialurônico",
+      "boca",
+      "beleza",
+      "agulha"
+    ]
+  },
+  {
+    "id": 8,
+    "nome": "Peeling Químico Médio",
+    "precoSugerido": 450.0,
+    "numeroSessoes": 3,
+    "tempoSessaoMin": 40,
+    "descricao": "O peeling químico médio é um tratamento que utiliza ácidos para remover as camadas superficiais e médias da pele, promovendo a renovação celular. É eficaz no tratamento de manchas, cicatrizes de acne, rugas finas e melhora da textura geral da pele. O procedimento resulta em uma pele mais lisa, uniforme e rejuvenescida.",
+    "tipoFinanceiro": "Entrada",
+    "tipoComercial": "Pacote",
+    "insumos": [
+      {
+        "nome": "Solução de Ácido (ex: ATA, Jessner)",
+        "valor": 80.0
+      },
+      {
+        "nome": "Solução de limpeza pré-peeling",
+        "valor": 10.0
+      },
+      {
+        "nome": "Gaze",
+        "valor": 0.4
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Máscara calmante pós-peeling",
+        "valor": 20.0
+      },
+      {
+        "nome": "Protetor solar",
+        "valor": 5.0
+      }
+    ],
+    "custoProfissionalPorSessao": 100.0,
+    "labels": [
+      "renovação celular",
+      "manchas",
+      "acne",
+      "cicatrizes",
+      "pele lisa",
+      "rejuvenescimento",
+      "rosto",
+      "química"
+    ]
+  },
+  {
+    "id": 9,
+    "nome": "Limpeza de Pele Profunda",
+    "precoSugerido": 250.0,
+    "numeroSessoes": 1,
+    "tempoSessaoMin": 90,
+    "descricao": "A limpeza de pele profunda é um procedimento estético facial que remove cravos, impurezas, células mortas e milium da pele. O processo inclui higienização, esfoliação, extração, e aplicação de máscaras calmantes e hidratantes. Ideal para todos os tipos de pele, promove uma aparência mais limpa, saudável e previne o surgimento de acne.",
+    "tipoFinanceiro": "Entrada",
+    "tipoComercial": "Recorrência",
+    "insumos": [
+      {
+        "nome": "Kit básico de limpeza de pele (loções, esfoliante, emoliente)",
+        "valor": 40.0
+      },
+      {
+        "nome": "Máscara calmante",
+        "valor": 15.0
+      },
+      {
+        "nome": "Máscara hidratante",
+        "valor": 15.0
+      },
+      {
+        "nome": "Extrator de cravos (custo diluído por uso)",
+        "valor": 1.0
+      },
+      {
+        "nome": "Algodão e Gaze",
+        "valor": 2.0
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Protetor solar",
+        "valor": 3.0
+      }
+    ],
+    "custoProfissionalPorSessao": 80.0,
+    "labels": [
+      "limpeza",
+      "cravos",
+      "poros",
+      "pele oleosa",
+      "hidratação",
+      "rosto",
+      "bem-estar",
+      "extração"
+    ]
+  },
+  {
+    "id": 10,
+    "nome": "Radiofrequência Facial",
+    "precoSugerido": 380.0,
+    "numeroSessoes": 6,
+    "tempoSessaoMin": 50,
+    "descricao": "A radiofrequência facial é um tratamento não invasivo que utiliza ondas eletromagnéticas para aquecer as camadas profundas da pele, estimulando a produção de colágeno e elastina. É eficaz para reduzir flacidez, suavizar rugas finas e melhorar a textura da pele. O procedimento oferece resultados graduais e duradouros com efeito lifting natural.",
+    "tipoFinanceiro": "Entrada",
+    "tipoComercial": "Pacote",
+    "insumos": [
+      {
+        "nome": "Gel condutor para radiofrequência",
+        "valor": 8.0
+      },
+      {
+        "nome": "Protetor ocular",
+        "valor": 2.0
+      },
+      {
+        "nome": "Papel filme protetor",
+        "valor": 1.5
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Gaze",
+        "valor": 0.3
+      },
+      {
+        "nome": "Álcool 70%",
+        "valor": 0.06
+      }
+    ],
+    "custoProfissionalPorSessao": 70.0,
+    "labels": [
+      "flacidez",
+      "colágeno",
+      "lifting",
+      "tecnologia",
+      "rosto",
+      "anti-aging",
+      "firmeza",
+      "não invasivo"
+    ]
+  },
+  {
+    "id": 11,
+    "nome": "Microagulhamento com Drug Delivery",
+    "precoSugerido": 320.0,
+    "numeroSessoes": 4,
+    "tempoSessaoMin": 60,
+    "descricao": "O microagulhamento com drug delivery combina a técnica de microagulhamento com a aplicação de ativos específicos. As microagulhas criam microcanais na pele, facilitando a penetração de substâncias como ácido hialurônico, vitamina C e fatores de crescimento. É eficaz para tratar cicatrizes de acne, manchas, rugas e melhorar a textura geral da pele.",
+    "tipoFinanceiro": "Entrada",
+    "tipoComercial": "Pacote",
+    "insumos": [
+      {
+        "nome": "Dermapen descartável",
+        "valor": 45.0
+      },
+      {
+        "nome": "Sérum de ácido hialurônico",
+        "valor": 25.0
+      },
+      {
+        "nome": "Anestésico tópico",
+        "valor": 12.0
+      },
+      {
+        "nome": "Máscara calmante",
+        "valor": 18.0
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Gaze estéril",
+        "valor": 0.8
+      },
+      {
+        "nome": "Álcool 70%",
+        "valor": 0.06
+      }
+    ],
+    "custoProfissionalPorSessao": 90.0,
+    "labels": [
+      "cicatrizes",
+      "acne",
+      "manchas",
+      "textura",
+      "renovação",
+      "microagulhas",
+      "penetração",
+      "colágeno"
+    ]
+  }
+]
