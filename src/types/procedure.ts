@@ -14,6 +14,7 @@ export interface Procedure {
   insumos: Insumo[];
   custoProfissionalPorSessao: number;
   labels: string[];
+  imagem?: string; // Nome do arquivo da imagem (opcional)
 }
 
 export type ViewType = 'financeiro' | 'comercial';

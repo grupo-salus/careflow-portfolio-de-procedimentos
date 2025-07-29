@@ -76,14 +76,14 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
               <h2 className="text-2xl font-bold text-gray-900">
                 {procedure.nome}
               </h2>
-                             <div className="flex items-center gap-2 mt-2">
-                 <span
-                   className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                   style={getTipoColors(procedure.tipo)}
-                 >
-                   {procedure.tipo}
-                 </span>
-               </div>
+              <div className="flex items-center gap-2 mt-2">
+                <span
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                  style={getTipoColors(procedure.tipo)}
+                >
+                  {procedure.tipo}
+                </span>
+              </div>
             </div>
             <button
               onClick={onClose}
@@ -97,7 +97,7 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
           <div className="mb-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Description */}
-              <div>
+              <div className="max-h-[250px] overflow-y-auto">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">
                   Descrição
                 </h3>
@@ -106,25 +106,45 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
                 </p>
               </div>
 
-              {/* Image Placeholder */}
-              <div className="bg-gray-100 rounded-lg flex items-center justify-center min-h-[200px]">
-                <div className="text-center text-gray-500">
-                  <div className="w-16 h-16 mx-auto mb-2 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-8 h-8 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
+              {/* Image */}
+              <div className="bg-gray-100 rounded-lg overflow-hidden h-[250px] flex items-center justify-center">
+                {procedure.imagem ? (
+                  <img
+                    src={`/procedimentos/${procedure.imagem}`}
+                    alt={procedure.nome}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback para placeholder se a imagem não carregar
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = "none";
+                      target.nextElementSibling?.classList.remove("hidden");
+                    }}
+                  />
+                ) : null}
+                {/* Fallback placeholder */}
+                <div
+                  className={`w-full h-full flex items-center justify-center ${
+                    procedure.imagem ? "hidden" : ""
+                  }`}
+                >
+                  <div className="text-center text-gray-500">
+                    <div className="w-16 h-16 mx-auto mb-2 bg-gray-200 rounded-lg flex items-center justify-center">
+                      <svg
+                        className="w-8 h-8 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                    <p className="text-sm">Imagem do Procedimento</p>
                   </div>
-                  <p className="text-sm">Imagem do Procedimento</p>
                 </div>
               </div>
             </div>
