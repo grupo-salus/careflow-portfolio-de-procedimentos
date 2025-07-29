@@ -9,6 +9,7 @@ import {
 } from "../services/marginCalculator";
 import LabelIcon from "./LabelIcon";
 import { getTipoColors } from "../utils/typeColors";
+import { getProcedureImageUrl } from "../utils/imageUtils";
 
 interface ProcedureModalProps {
   procedure: Procedure | null;
@@ -110,7 +111,7 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
               <div className="bg-gray-100 rounded-lg overflow-hidden h-[250px] flex items-center justify-center">
                 {procedure.imagem ? (
                   <img
-                    src={`/procedimentos/${procedure.imagem}`}
+                    src={getProcedureImageUrl(procedure.imagem)}
                     alt={procedure.nome}
                     className="w-full h-full object-cover"
                     onError={(e) => {

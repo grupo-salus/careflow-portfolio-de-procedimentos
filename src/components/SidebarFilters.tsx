@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { FilterState } from "../types/procedure";
 import LabelIcon from "./LabelIcon";
+import { getLogoUrl } from "../utils/imageUtils";
 
 interface SidebarFiltersProps {
   filters: FilterState;
@@ -78,7 +79,7 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
       >
         <div className="flex items-center justify-center p-6 border-b border-gray-200">
           {/* Logo Careflow */}
-          <img src="/careflow.png" alt="Careflow Logo" className="h-8 w-auto" />
+          <img src={getLogoUrl()} alt="Careflow Logo" className="h-8 w-auto" />
         </div>
 
         <div className="p-6 overflow-y-auto h-full pb-20">
