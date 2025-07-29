@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 /* Reset CSS to prevent unwanted scroll */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -21,6 +22,18 @@ html, body {
   --careflow-secondary: #a855f7;
   --careflow-purple: #8b5cf6;
   --careflow-orange: #f97316;
+  --careflow-gradient: linear-gradient(
+    120deg,
+    #683fe7 15%,
+    #ca2cb2 50%,
+    #fd9010 100%
+  );
+  --careflow-gradient-hover: linear-gradient(
+    120deg,
+    #5a35d1 15%,
+    #b0259e 50%,
+    #e67e0e 100%
+  );
 }
 
 /* Custom scrollbar styles */
@@ -44,4 +57,29 @@ html, body {
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
+}
+
+/* Remove default input styling */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+  outline: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Remove number input spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

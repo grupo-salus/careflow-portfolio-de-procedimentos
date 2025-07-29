@@ -1,14 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import {
-  X,
-  Clock,
-  DollarSign,
-  Users,
-  Tag,
-  Calculator,
-  TrendingUp,
-  Settings,
-} from "lucide-react";
+import { X, Tag, Calculator, TrendingUp, Settings } from "lucide-react";
 import { Procedure } from "../types/procedure";
 import {
   calcularMargemContribuicao,
@@ -161,13 +152,14 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
                 {procedure.labels.map((label, index) => (
                   <div
                     key={index}
-                    className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 rounded-lg text-sm font-medium border border-blue-200"
+                    className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border"
+                    style={{
+                      background: "var(--careflow-gradient)",
+                      color: "white",
+                      borderColor: "transparent",
+                    }}
                   >
-                    <LabelIcon
-                      label={label}
-                      size="sm"
-                      className="text-blue-600"
-                    />
+                    <LabelIcon label={label} size="sm" className="text-white" />
                     <span className="capitalize">{label}</span>
                   </div>
                 ))}
@@ -201,7 +193,7 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
                           precoSessao: Number(e.target.value) || 0,
                         }))
                       }
-                      className="w-full pl-8 pr-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-900 transition-all duration-200 hover:bg-white hover:border-gray-300 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
                       min="0"
                       step="0.01"
                     />
@@ -220,7 +212,7 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
                         numeroSessoes: Number(e.target.value) || 0,
                       }))
                     }
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-900 transition-all duration-200 hover:bg-white hover:border-gray-300 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
                     min="1"
                     step="1"
                   />
@@ -232,7 +224,7 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
                       numeroSessoes: procedure.numeroSessoes,
                     })
                   }
-                  className="w-full px-3 py-1.5 text-xs bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="w-full px-3 py-2 text-xs bg-gray-50 text-gray-700 border border-gray-200 rounded-lg hover:bg-white hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-400"
                 >
                   Restaurar Valores
                 </button>

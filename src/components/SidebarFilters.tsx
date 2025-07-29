@@ -60,11 +60,7 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
       >
         <div className="flex items-center justify-center p-6 border-b border-gray-200">
           {/* Logo Careflow */}
-          <img
-            src="/careflow.png"
-            alt="Careflow Logo"
-            className="h-8 w-auto"
-          />
+          <img src="/careflow.png" alt="Careflow Logo" className="h-8 w-auto" />
         </div>
 
         <div className="p-6 overflow-y-auto h-full pb-20">
@@ -83,15 +79,15 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                   WebkitTextFillColor: "transparent",
                 }}
               />
-              <input
-                type="text"
-                value={filters.searchTerm}
-                onChange={(e) =>
-                  onFiltersChange({ ...filters, searchTerm: e.target.value })
-                }
-                placeholder="Digite o nome do procedimento..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+                             <input
+                 type="text"
+                 value={filters.searchTerm}
+                 onChange={(e) =>
+                   onFiltersChange({ ...filters, searchTerm: e.target.value })
+                 }
+                 placeholder="Digite o nome do procedimento..."
+                 className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 transition-all duration-200 hover:bg-white hover:border-gray-300 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+               />
             </div>
           </div>
 
@@ -119,7 +115,13 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                     type="checkbox"
                     checked={filters.selectedLabels.includes(label)}
                     onChange={() => toggleLabel(label)}
-                    className="text-blue-600 rounded focus:ring-blue-500"
+                    className="rounded focus:ring-2 focus:ring-offset-0"
+                    style={
+                      {
+                        accentColor: "var(--careflow-primary)",
+                        "--tw-ring-color": "var(--careflow-primary)",
+                      } as React.CSSProperties
+                    }
                   />
                   <LabelIcon
                     label={label}
@@ -165,6 +167,9 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                     })
                   }
                   className="w-full mt-1"
+                  style={{
+                    accentColor: "var(--careflow-primary)",
+                  }}
                 />
               </div>
               <div>
@@ -183,6 +188,9 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                     })
                   }
                   className="w-full mt-1"
+                  style={{
+                    accentColor: "var(--careflow-primary)",
+                  }}
                 />
               </div>
             </div>
@@ -219,6 +227,9 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                     })
                   }
                   className="w-full mt-1"
+                  style={{
+                    accentColor: "var(--careflow-primary)",
+                  }}
                 />
               </div>
               <div>
@@ -237,6 +248,9 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
                     })
                   }
                   className="w-full mt-1"
+                  style={{
+                    accentColor: "var(--careflow-primary)",
+                  }}
                 />
               </div>
             </div>
