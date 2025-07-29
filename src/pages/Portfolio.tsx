@@ -57,7 +57,10 @@ const Portfolio: React.FC = () => {
     setSelectedProcedure(null);
   };
 
-  const totalProcedures = filteredProcedures.length;
+  const totalProcedures = Object.values(groupedProcedures).reduce(
+    (total, procedures) => total + procedures.length,
+    0
+  );
 
   return (
     <div className="h-full bg-gray-50 flex flex-col">
