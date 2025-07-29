@@ -1,11 +1,261 @@
 [
   {
+    "id": 1,
+    "nome": "Depilação Laser Virilha (6 variações)",
+    "precoSugerido": 88.0,
+    "numeroSessoes": 2,
+    "tempoSessaoMin": 30,
+    "descricao": "A depilação a laser da virilha é um procedimento estético que utiliza tecnologia laser para remover pelos de forma definitiva ou semi-permanente. O tratamento é eficaz para reduzir significativamente o crescimento dos pelos, resultando em uma pele mais lisa e sem pelos. Ideal para quem busca uma solução duradoura para a depilação íntima.",
+    "tipo": "Entrada",
+    "insumos": [
+      {
+        "nome": "Gel de contato",
+        "valor": 1.2
+      },
+      {
+        "nome": "Espátula de madeira",
+        "valor": 0.2
+      },
+      {
+        "nome": "Lápis branco",
+        "valor": 5.79
+      },
+      {
+        "nome": "Touca Descartável",
+        "valor": 0.09
+      },
+      {
+        "nome": "Luva de procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Máscara Descartável",
+        "valor": 0.12
+      },
+      {
+        "nome": "Gaze",
+        "valor": 0.2
+      },
+      {
+        "nome": "Clorexidina 0,2%",
+        "valor": 0.06
+      }
+    ],
+    "custoProfissionalPorSessao": 7.51,
+    "labels": [
+      "depilação",
+      "laser",
+      "virilha",
+      "pelos",
+      "definitivo",
+      "pele lisa",
+      "íntimo",
+      "tecnologia"
+    ]
+  },
+  {
+    "id": 2,
+    "nome": "Depilação Laser Pernas (8 variações)",
+    "precoSugerido": 143.0,
+    "numeroSessoes": 3,
+    "tempoSessaoMin": 90,
+    "descricao": "A depilação a laser das pernas é um tratamento estético que utiliza tecnologia laser para remover pelos de forma definitiva ou semi-permanente. O procedimento é eficaz para reduzir significativamente o crescimento dos pelos, resultando em pernas mais lisas e sem pelos. Ideal para quem busca uma solução duradoura e eficiente.",
+    "tipo": "Pacote",
+    "insumos": [
+      {
+        "nome": "Gel de contato",
+        "valor": 1.2
+      },
+      {
+        "nome": "Espátula de madeira",
+        "valor": 0.2
+      },
+      {
+        "nome": "Lápis branco",
+        "valor": 5.79
+      },
+      {
+        "nome": "Touca Descartável",
+        "valor": 0.09
+      },
+      {
+        "nome": "Luva de procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Máscara Descartável",
+        "valor": 0.12
+      },
+      {
+        "nome": "Gaze",
+        "valor": 0.2
+      },
+      {
+        "nome": "Clorexidina 0,2%",
+        "valor": 0.06
+      }
+    ],
+    "custoProfissionalPorSessao": 18.78,
+    "labels": [
+      "depilação",
+      "laser",
+      "pernas",
+      "pelos",
+      "definitivo",
+      "pele lisa",
+      "tecnologia",
+      "pacote"
+    ]
+  },
+  {
+    "id": 3,
+    "nome": "Preenchimento Facial",
+    "precoSugerido": 0,
+    "numeroSessoes": 1,
+    "tempoSessaoMin": 60,
+    "descricao": "O preenchimento facial com ácido hialurônico é um procedimento estético que visa restaurar volume, suavizar rugas e linhas de expressão, e melhorar o contorno facial. Utiliza-se ácido hialurônico, uma substância segura e absorvível pelo organismo, para obter resultados naturais e harmoniosos.",
+    "tipo": "Alto Ticket",
+    "insumos": [
+      {
+        "nome": "Ácido Hialurônico",
+        "valor": 295.53
+      },
+      {
+        "nome": "Luva de procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Lápis de marcação",
+        "valor": 5.79
+      },
+      {
+        "nome": "Gase",
+        "valor": 0.2
+      },
+      {
+        "nome": "Álcool 70%",
+        "valor": 0.03
+      }
+    ],
+    "custoProfissionalPorSessao": 43.37,
+    "labels": [
+      "preenchimento",
+      "volume",
+      "rugas",
+      "ácido hialurônico",
+      "rosto",
+      "rejuvenescimento",
+      "contorno",
+      "agulha"
+    ]
+  },
+  {
+    "id": 4,
+    "nome": "Toxina Bot 50 UI Allergan",
+    "precoSugerido": 935.0,
+    "numeroSessoes": 1,
+    "tempoSessaoMin": 30,
+    "descricao": "A toxina botulínica, comercialmente conhecida como Botox, é utilizada para relaxar os músculos faciais que causam rugas de expressão. A unidade de 50ui é ideal para tratamentos menores e específicos, como rugas entre as sobrancelhas ou pés de galinha. O procedimento é minimamente invasivo e oferece resultados naturais.",
+    "tipo": "Alto Ticket",
+    "insumos": [
+      {
+        "nome": "Toxina botulínica (Botox Allergan 50ui)",
+        "valor": 248.38
+      },
+      {
+        "nome": "Flaconete de soro estéril",
+        "valor": 0.8
+      },
+      {
+        "nome": "Seringa 1 ml c/ Agulha 13x30",
+        "valor": 1.52
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Lápis de marcação",
+        "valor": 5.79
+      },
+      {
+        "nome": "Gase",
+        "valor": 0.2
+      },
+      {
+        "nome": "Álcool 70%",
+        "valor": 0.03
+      }
+    ],
+    "custoProfissionalPorSessao": 21.68,
+    "labels": [
+      "toxina botulínica",
+      "botox",
+      "rugas",
+      "linhas de expressão",
+      "rosto",
+      "rejuvenescimento",
+      "agulha",
+      "allergan"
+    ]
+  },
+  {
+    "id": 5,
+    "nome": "Toxina Bot 100 UI Allergan",
+    "precoSugerido": 935.0,
+    "numeroSessoes": 1,
+    "tempoSessaoMin": 30,
+    "descricao": "A toxina botulínica Allergan 100ui é utilizada para relaxar os músculos faciais que causam rugas de expressão. Esta quantidade é versátil para tratar múltiplas áreas da face, incluindo testa, pés de galinha e rugas entre as sobrancelhas. O procedimento oferece resultados naturais e duradouros.",
+    "tipo": "Alto Ticket",
+    "insumos": [
+      {
+        "nome": "Toxina botulínica (Botox Allergan 100ui)",
+        "valor": 517.0
+      },
+      {
+        "nome": "Flaconete de soro estéril",
+        "valor": 0.8
+      },
+      {
+        "nome": "Seringa 1 ml c/ Agulha 13x30",
+        "valor": 1.52
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Lápis de marcação",
+        "valor": 5.79
+      },
+      {
+        "nome": "Gase",
+        "valor": 0.2
+      },
+      {
+        "nome": "Álcool 70%",
+        "valor": 0.06
+      }
+    ],
+    "custoProfissionalPorSessao": 21.68,
+    "labels": [
+      "toxina botulínica",
+      "botox",
+      "rugas",
+      "linhas de expressão",
+      "rosto",
+      "rejuvenescimento",
+      "agulha",
+      "allergan"
+    ]
+  },
+  {
     "id": 6,
     "nome": "Toxina Botulínica XEOMIN (100ui)",
     "precoSugerido": 935.0,
     "numeroSessoes": 1,
     "tempoSessaoMin": 30,
-    "descricao": "A toxina botulínica, comercialmente conhecida como Xeomin, é utilizada para relaxar os músculos faciais que causam rugas de expressão, como as linhas da testa, pés de galinha e rugas entre as sobrancelhas. O procedimento é minimamente invasivo e resulta em uma aparência mais rejuvenescida e descansada. A unidade de 100ui (unidades internacionais) é versátil para tratar diferentes áreas da face, dependendo da necessidade do paciente.",
+    "descricao": "A toxina botulínica Xeomin 100ui é uma alternativa ao Botox tradicional, utilizada para relaxar os músculos faciais que causam rugas de expressão. O Xeomin é conhecido por sua pureza e eficácia, sendo ideal para tratar rugas da testa, pés de galinha e linhas entre as sobrancelhas.",
     "tipo": "Alto Ticket",
     "insumos": [
       {
@@ -39,44 +289,44 @@
     ],
     "custoProfissionalPorSessao": 21.68,
     "labels": [
-      "rejuvenescimento",
+      "toxina botulínica",
+      "xeomin",
       "rugas",
       "linhas de expressão",
       "rosto",
-      "testa",
-      "olhos",
-      "beleza",
-      "agulha"
+      "rejuvenescimento",
+      "agulha",
+      "pureza"
     ]
   },
   {
     "id": 7,
-    "nome": "Preenchimento Labial (1ml Ácido Hialurônico)",
-    "precoSugerido": 1200.0,
+    "nome": "Toxina Bot 200 UI Allergan",
+    "precoSugerido": 935.0,
     "numeroSessoes": 1,
-    "tempoSessaoMin": 45,
-    "descricao": "O preenchimento labial com ácido hialurônico é um procedimento que visa aumentar o volume, definir o contorno e melhorar a hidratação dos lábios. Utiliza-se 1ml de ácido hialurônico, uma substância segura e absorvível pelo organismo, para obter resultados naturais e harmoniosos. É ideal para quem busca lábios mais definidos e volumosos.",
+    "tempoSessaoMin": 30,
+    "descricao": "A toxina botulínica Allergan 200ui é utilizada para tratamentos mais extensos de rugas de expressão. Esta quantidade permite tratar múltiplas áreas da face simultaneamente, incluindo testa, pés de galinha, rugas entre as sobrancelhas e outras linhas de expressão. Ideal para casos que requerem maior cobertura.",
     "tipo": "Alto Ticket",
     "insumos": [
       {
-        "nome": "Ácido Hialurônico (1ml)",
-        "valor": 450.0
+        "nome": "Toxina botulínica (Botox Allergan 200ui)",
+        "valor": 981.81
       },
       {
-        "nome": "Anestésico tópico",
-        "valor": 15.0
+        "nome": "Flaconete de soro estéril",
+        "valor": 0.8
       },
       {
-        "nome": "Cânula para preenchimento",
-        "valor": 25.0
-      },
-      {
-        "nome": "Seringa 1 ml",
-        "valor": 1.5
+        "nome": "Seringa 1 ml c/ Agulha 13x30",
+        "valor": 1.52
       },
       {
         "nome": "Luva de Procedimento",
         "valor": 0.6
+      },
+      {
+        "nome": "Lápis de marcação",
+        "valor": 5.79
       },
       {
         "nome": "Gase",
@@ -87,208 +337,116 @@
         "valor": 0.06
       }
     ],
-    "custoProfissionalPorSessao": 200.0,
+    "custoProfissionalPorSessao": 21.68,
     "labels": [
-      "volume",
-      "lábios",
-      "contorno labial",
-      "hidratação",
-      "ácido hialurônico",
-      "boca",
-      "beleza",
-      "agulha"
+      "toxina botulínica",
+      "botox",
+      "rugas",
+      "linhas de expressão",
+      "rosto",
+      "rejuvenescimento",
+      "agulha",
+      "extenso"
     ]
   },
   {
     "id": 8,
-    "nome": "Peeling Químico Médio",
-    "precoSugerido": 450.0,
-    "numeroSessoes": 3,
-    "tempoSessaoMin": 40,
-    "descricao": "O peeling químico médio é um tratamento que utiliza ácidos para remover as camadas superficiais e médias da pele, promovendo a renovação celular. É eficaz no tratamento de manchas, cicatrizes de acne, rugas finas e melhora da textura geral da pele. O procedimento resulta em uma pele mais lisa, uniforme e rejuvenescida.",
-    "tipo": "Pacote",
+    "nome": "Toxina Botulínica DYSPORT (300ui)",
+    "precoSugerido": 935.0,
+    "numeroSessoes": 1,
+    "tempoSessaoMin": 30,
+    "descricao": "A toxina botulínica Dysport 300ui é uma alternativa ao Botox, utilizada para relaxar os músculos faciais que causam rugas de expressão. O Dysport é conhecido por sua rápida ação e eficácia, sendo ideal para tratar rugas da testa, pés de galinha e outras linhas de expressão faciais.",
+    "tipo": "Alto Ticket",
     "insumos": [
       {
-        "nome": "Solução de Ácido (ex: ATA, Jessner)",
-        "valor": 80.0
+        "nome": "Toxina botulínica DYSPORT (300ui)",
+        "valor": 688.0
       },
       {
-        "nome": "Solução de limpeza pré-peeling",
-        "valor": 10.0
+        "nome": "Flaconete de soro estéril",
+        "valor": 0.8
       },
       {
-        "nome": "Gaze",
-        "valor": 0.4
+        "nome": "Seringa 1 ml c/ Agulha 13x30",
+        "valor": 1.52
       },
       {
         "nome": "Luva de Procedimento",
         "valor": 0.6
       },
       {
-        "nome": "Máscara calmante pós-peeling",
-        "valor": 20.0
+        "nome": "Lápis de marcação",
+        "valor": 5.79
       },
       {
-        "nome": "Protetor solar",
-        "valor": 5.0
+        "nome": "Gase",
+        "valor": 0.2
+      },
+      {
+        "nome": "Álcool 70%",
+        "valor": 0.06
       }
     ],
-    "custoProfissionalPorSessao": 100.0,
+    "custoProfissionalPorSessao": 21.68,
     "labels": [
-      "renovação celular",
-      "manchas",
-      "acne",
-      "cicatrizes",
-      "pele lisa",
-      "rejuvenescimento",
+      "toxina botulínica",
+      "dysport",
+      "rugas",
+      "linhas de expressão",
       "rosto",
-      "química"
+      "rejuvenescimento",
+      "agulha",
+      "rápida ação"
     ]
   },
   {
     "id": 9,
-    "nome": "Limpeza de Pele Profunda",
-    "precoSugerido": 250.0,
+    "nome": "Toxina Botulínica DYSPORT (500ui)",
+    "precoSugerido": 1250.0,
     "numeroSessoes": 1,
-    "tempoSessaoMin": 90,
-    "descricao": "A limpeza de pele profunda é um procedimento estético facial que remove cravos, impurezas, células mortas e milium da pele. O processo inclui higienização, esfoliação, extração, e aplicação de máscaras calmantes e hidratantes. Ideal para todos os tipos de pele, promove uma aparência mais limpa, saudável e previne o surgimento de acne.",
-    "tipo": "Entrada",
+    "tempoSessaoMin": 45,
+    "descricao": "A toxina botulínica Dysport 500ui é utilizada para tratamentos extensos de rugas de expressão. Esta quantidade permite tratar múltiplas áreas da face simultaneamente, oferecendo uma solução abrangente para rejuvenescimento facial. O Dysport é conhecido por sua eficácia e rápida ação.",
+    "tipo": "Alto Ticket",
     "insumos": [
       {
-        "nome": "Kit básico de limpeza de pele (loções, esfoliante, emoliente)",
-        "valor": 40.0
+        "nome": "Toxina botulínica DYSPORT (300ui)",
+        "valor": 999.0
       },
       {
-        "nome": "Máscara calmante",
-        "valor": 15.0
-      },
-      {
-        "nome": "Máscara hidratante",
-        "valor": 15.0
-      },
-      {
-        "nome": "Extrator de cravos (custo diluído por uso)",
-        "valor": 1.0
-      },
-      {
-        "nome": "Algodão e Gaze",
-        "valor": 2.0
-      },
-      {
-        "nome": "Luva de Procedimento",
-        "valor": 0.6
-      },
-      {
-        "nome": "Protetor solar",
-        "valor": 3.0
-      }
-    ],
-    "custoProfissionalPorSessao": 80.0,
-    "labels": [
-      "limpeza",
-      "cravos",
-      "poros",
-      "pele oleosa",
-      "hidratação",
-      "rosto",
-      "bem-estar",
-      "extração"
-    ]
-  },
-  {
-    "id": 10,
-    "nome": "Radiofrequência Facial",
-    "precoSugerido": 380.0,
-    "numeroSessoes": 6,
-    "tempoSessaoMin": 50,
-    "descricao": "A radiofrequência facial é um tratamento não invasivo que utiliza ondas eletromagnéticas para aquecer as camadas profundas da pele, estimulando a produção de colágeno e elastina. É eficaz para reduzir flacidez, suavizar rugas finas e melhorar a textura da pele. O procedimento oferece resultados graduais e duradouros com efeito lifting natural.",
-    "tipo": "Pacote",
-    "insumos": [
-      {
-        "nome": "Gel condutor para radiofrequência",
-        "valor": 8.0
-      },
-      {
-        "nome": "Protetor ocular",
-        "valor": 2.0
-      },
-      {
-        "nome": "Papel filme protetor",
-        "valor": 1.5
-      },
-      {
-        "nome": "Luva de Procedimento",
-        "valor": 0.6
-      },
-      {
-        "nome": "Gaze",
-        "valor": 0.3
-      },
-      {
-        "nome": "Álcool 70%",
-        "valor": 0.06
-      }
-    ],
-    "custoProfissionalPorSessao": 70.0,
-    "labels": [
-      "flacidez",
-      "colágeno",
-      "lifting",
-      "tecnologia",
-      "rosto",
-      "anti-aging",
-      "firmeza",
-      "não invasivo"
-    ]
-  },
-  {
-    "id": 11,
-    "nome": "Microagulhamento com Drug Delivery",
-    "precoSugerido": 320.0,
-    "numeroSessoes": 4,
-    "tempoSessaoMin": 60,
-    "descricao": "O microagulhamento com drug delivery combina a técnica de microagulhamento com a aplicação de ativos específicos. As microagulhas criam microcanais na pele, facilitando a penetração de substâncias como ácido hialurônico, vitamina C e fatores de crescimento. É eficaz para tratar cicatrizes de acne, manchas, rugas e melhorar a textura geral da pele.",
-    "tipo": "Pacote",
-    "insumos": [
-      {
-        "nome": "Dermapen descartável",
-        "valor": 45.0
-      },
-      {
-        "nome": "Sérum de ácido hialurônico",
-        "valor": 25.0
-      },
-      {
-        "nome": "Anestésico tópico",
-        "valor": 12.0
-      },
-      {
-        "nome": "Máscara calmante",
-        "valor": 18.0
-      },
-      {
-        "nome": "Luva de Procedimento",
-        "valor": 0.6
-      },
-      {
-        "nome": "Gaze estéril",
+        "nome": "Flaconete de soro estéril",
         "valor": 0.8
       },
       {
+        "nome": "Seringa 1 ml c/ Agulha 13x30",
+        "valor": 1.52
+      },
+      {
+        "nome": "Luva de Procedimento",
+        "valor": 0.6
+      },
+      {
+        "nome": "Lápis de marcação",
+        "valor": 5.79
+      },
+      {
+        "nome": "Gase",
+        "valor": 0.2
+      },
+      {
         "nome": "Álcool 70%",
         "valor": 0.06
       }
     ],
-    "custoProfissionalPorSessao": 90.0,
+    "custoProfissionalPorSessao": 0,
     "labels": [
-      "cicatrizes",
-      "acne",
-      "manchas",
-      "textura",
-      "renovação",
-      "microagulhas",
-      "penetração",
-      "colágeno"
+      "toxina botulínica",
+      "dysport",
+      "rugas",
+      "linhas de expressão",
+      "rosto",
+      "rejuvenescimento",
+      "agulha",
+      "extenso"
     ]
   }
 ]

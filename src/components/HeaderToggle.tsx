@@ -33,9 +33,22 @@ const HeaderToggle: React.FC<HeaderToggleProps> = ({
                 isSidebarOpen ? "rotate-90" : ""
               }`}
               fill="none"
-              stroke="currentColor"
+              stroke="url(#careflowGradient)"
               viewBox="0 0 24 24"
             >
+              <defs>
+                <linearGradient
+                  id="careflowGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop offset="15%" stopColor="#683fe7" />
+                  <stop offset="50%" stopColor="#ca2cb2" />
+                  <stop offset="100%" stopColor="#fd9010" />
+                </linearGradient>
+              </defs>
               {isSidebarOpen ? (
                 // X icon
                 <>
