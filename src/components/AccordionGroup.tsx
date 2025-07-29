@@ -22,7 +22,7 @@ const AccordionGroup: React.FC<AccordionGroupProps> = ({
     <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-6 py-4 text-left hover:bg-gray-50 transition-all duration-200 border-b border-gray-100"
+        className="w-full px-6 py-4 text-left transition-all duration-200 border-b border-gray-100"
       >
         <div className="flex items-center justify-between">
           <div>

@@ -74,25 +74,41 @@ const HeaderToggle: React.FC<HeaderToggleProps> = ({
         <div className="flex items-center bg-gray-100 rounded-lg p-1">
           <button
             onClick={() => onViewChange("financeiro")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden hover:bg-gray-50 ${
               currentView === "financeiro"
-                ? "bg-white text-[var(--careflow-primary)] shadow-sm"
+                ? "text-white shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            <DollarSign className="w-4 h-4" />
-            Financeiro
+            {currentView === "financeiro" && (
+              <div
+                className="absolute inset-0 opacity-100 transition-opacity duration-200"
+                style={{
+                  background: "var(--careflow-gradient)",
+                }}
+              />
+            )}
+            <DollarSign className="w-4 h-4 relative z-10" />
+            <span className="relative z-10">Financeiro</span>
           </button>
           <button
             onClick={() => onViewChange("comercial")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden hover:bg-gray-50 ${
               currentView === "comercial"
-                ? "bg-white text-[var(--careflow-primary)] shadow-sm"
+                ? "text-white shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            <TrendingUp className="w-4 h-4" />
-            Comercial
+            {currentView === "comercial" && (
+              <div
+                className="absolute inset-0 opacity-100 transition-opacity duration-200"
+                style={{
+                  background: "var(--careflow-gradient)",
+                }}
+              />
+            )}
+            <TrendingUp className="w-4 h-4 relative z-10" />
+            <span className="relative z-10">Comercial</span>
           </button>
         </div>
       </div>
