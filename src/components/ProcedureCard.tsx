@@ -2,6 +2,7 @@ import React from "react";
 import { Clock, DollarSign, Users, Tag } from "lucide-react";
 import { Procedure } from "../types/procedure";
 import LabelIcon from "./LabelIcon";
+import { getTipoColors } from "../utils/typeColors";
 
 interface ProcedureCardProps {
   procedure: Procedure;
@@ -21,18 +22,14 @@ const ProcedureCard: React.FC<ProcedureCardProps> = ({
         <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
           {procedure.nome}
         </h3>
-        <div className="flex-shrink-0 ml-4">
-          <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-            ${
-              procedure.tipoFinanceiro === "Alto Ticket"
-                ? "bg-orange-100 text-orange-800"
-                : "bg-green-100 text-green-800"
-            }`}
-          >
-            {procedure.tipoFinanceiro}
-          </span>
-        </div>
+                 <div className="flex-shrink-0 ml-4">
+                       <span
+              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+              style={getTipoColors(procedure.tipo)}
+            >
+              {procedure.tipo}
+            </span>
+         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-4">

@@ -36,6 +36,18 @@ body {
   );
 }
 
+/* Tipo Colors */
+:root {
+  --tipo-alto-ticket-bg: rgba(139, 92, 246, 0.1);
+  --tipo-alto-ticket-text: #8b5cf6;
+  --tipo-entrada-bg: rgba(249, 115, 22, 0.1);
+  --tipo-entrada-text: #f97316;
+  --tipo-recorrencia-bg: rgba(139, 92, 246, 0.1);
+  --tipo-recorrencia-text: #8b5cf6;
+  --tipo-pacote-bg: rgba(249, 115, 22, 0.1);
+  --tipo-pacote-text: #f97316;
+}
+
 /* Custom scrollbar styles */
 .scrollbar-thin {
   scrollbar-width: thin;

@@ -6,8 +6,7 @@
     "numeroSessoes": 1,
     "tempoSessaoMin": 30,
     "descricao": "A toxina botulínica, comercialmente conhecida como Xeomin, é utilizada para relaxar os músculos faciais que causam rugas de expressão, como as linhas da testa, pés de galinha e rugas entre as sobrancelhas. O procedimento é minimamente invasivo e resulta em uma aparência mais rejuvenescida e descansada. A unidade de 100ui (unidades internacionais) é versátil para tratar diferentes áreas da face, dependendo da necessidade do paciente.",
-    "tipoFinanceiro": "Alto Ticket",
-    "tipoComercial": "Recorrência",
+    "tipo": "Alto Ticket",
     "insumos": [
       {
         "nome": "Toxina botulínica Xeomin 100ui",
@@ -57,8 +56,7 @@
     "numeroSessoes": 1,
     "tempoSessaoMin": 45,
     "descricao": "O preenchimento labial com ácido hialurônico é um procedimento que visa aumentar o volume, definir o contorno e melhorar a hidratação dos lábios. Utiliza-se 1ml de ácido hialurônico, uma substância segura e absorvível pelo organismo, para obter resultados naturais e harmoniosos. É ideal para quem busca lábios mais definidos e volumosos.",
-    "tipoFinanceiro": "Alto Ticket",
-    "tipoComercial": "Recorrência",
+    "tipo": "Alto Ticket",
     "insumos": [
       {
         "nome": "Ácido Hialurônico (1ml)",
@@ -108,8 +106,7 @@
     "numeroSessoes": 3,
     "tempoSessaoMin": 40,
     "descricao": "O peeling químico médio é um tratamento que utiliza ácidos para remover as camadas superficiais e médias da pele, promovendo a renovação celular. É eficaz no tratamento de manchas, cicatrizes de acne, rugas finas e melhora da textura geral da pele. O procedimento resulta em uma pele mais lisa, uniforme e rejuvenescida.",
-    "tipoFinanceiro": "Entrada",
-    "tipoComercial": "Pacote",
+    "tipo": "Pacote",
     "insumos": [
       {
         "nome": "Solução de Ácido (ex: ATA, Jessner)",
@@ -155,8 +152,7 @@
     "numeroSessoes": 1,
     "tempoSessaoMin": 90,
     "descricao": "A limpeza de pele profunda é um procedimento estético facial que remove cravos, impurezas, células mortas e milium da pele. O processo inclui higienização, esfoliação, extração, e aplicação de máscaras calmantes e hidratantes. Ideal para todos os tipos de pele, promove uma aparência mais limpa, saudável e previne o surgimento de acne.",
-    "tipoFinanceiro": "Entrada",
-    "tipoComercial": "Recorrência",
+    "tipo": "Entrada",
     "insumos": [
       {
         "nome": "Kit básico de limpeza de pele (loções, esfoliante, emoliente)",
@@ -206,8 +202,7 @@
     "numeroSessoes": 6,
     "tempoSessaoMin": 50,
     "descricao": "A radiofrequência facial é um tratamento não invasivo que utiliza ondas eletromagnéticas para aquecer as camadas profundas da pele, estimulando a produção de colágeno e elastina. É eficaz para reduzir flacidez, suavizar rugas finas e melhorar a textura da pele. O procedimento oferece resultados graduais e duradouros com efeito lifting natural.",
-    "tipoFinanceiro": "Entrada",
-    "tipoComercial": "Pacote",
+    "tipo": "Pacote",
     "insumos": [
       {
         "nome": "Gel condutor para radiofrequência",
@@ -253,8 +248,7 @@
     "numeroSessoes": 4,
     "tempoSessaoMin": 60,
     "descricao": "O microagulhamento com drug delivery combina a técnica de microagulhamento com a aplicação de ativos específicos. As microagulhas criam microcanais na pele, facilitando a penetração de substâncias como ácido hialurônico, vitamina C e fatores de crescimento. É eficaz para tratar cicatrizes de acne, manchas, rugas e melhorar a textura geral da pele.",
-    "tipoFinanceiro": "Entrada",
-    "tipoComercial": "Pacote",
+    "tipo": "Pacote",
     "insumos": [
       {
         "nome": "Dermapen descartável",

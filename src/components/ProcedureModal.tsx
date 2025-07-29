@@ -8,6 +8,7 @@ import {
   formatHours,
 } from "../services/marginCalculator";
 import LabelIcon from "./LabelIcon";
+import { getTipoColors } from "../utils/typeColors";
 
 interface ProcedureModalProps {
   procedure: Procedure | null;
@@ -75,28 +76,14 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
               <h2 className="text-2xl font-bold text-gray-900">
                 {procedure.nome}
               </h2>
-              <div className="flex items-center gap-2 mt-2">
-                <span
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                  ${
-                    procedure.tipoFinanceiro === "Alto Ticket"
-                      ? "bg-orange-100 text-orange-800"
-                      : "bg-green-100 text-green-800"
-                  }`}
-                >
-                  {procedure.tipoFinanceiro}
-                </span>
-                <span
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                  ${
-                    procedure.tipoComercial === "Recorrência"
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-purple-100 text-purple-800"
-                  }`}
-                >
-                  {procedure.tipoComercial}
-                </span>
-              </div>
+                             <div className="flex items-center gap-2 mt-2">
+                 <span
+                   className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                   style={getTipoColors(procedure.tipo)}
+                 >
+                   {procedure.tipo}
+                 </span>
+               </div>
             </div>
             <button
               onClick={onClose}
