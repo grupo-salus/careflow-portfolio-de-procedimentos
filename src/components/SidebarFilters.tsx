@@ -6,6 +6,7 @@ import {
   Clock,
   DollarSign,
   RotateCcw,
+  X,
 } from "lucide-react";
 import { FilterState } from "../types/procedure";
 import LabelIcon from "./LabelIcon";
@@ -77,9 +78,42 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex items-center justify-center p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           {/* Logo Careflow */}
           <img src={getLogoUrl()} alt="Careflow Logo" className="h-8 w-auto" />
+
+          {/* Botão de fechar no mobile */}
+          <button
+            onClick={onToggle}
+            className="lg:hidden p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="url(#careflowGradient)"
+              viewBox="0 0 24 24"
+            >
+              <defs>
+                <linearGradient
+                  id="careflowGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop offset="15%" stopColor="#683fe7" />
+                  <stop offset="50%" stopColor="#ca2cb2" />
+                  <stop offset="100%" stopColor="#fd9010" />
+                </linearGradient>
+              </defs>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
 
         <div className="p-6 overflow-y-auto h-full pb-20">

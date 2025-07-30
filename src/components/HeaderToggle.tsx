@@ -21,7 +21,7 @@ const HeaderToggle: React.FC<HeaderToggleProps> = ({
         isSidebarOpen ? "lg:ml-80" : "ml-0"
       }`}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-0">
         <div className="flex items-center gap-4">
           {/* Menu Burger */}
           <button
@@ -84,7 +84,7 @@ const HeaderToggle: React.FC<HeaderToggleProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center bg-gray-100 rounded-lg p-1">
+        <div className="flex items-center bg-gray-100 rounded-lg p-1 self-end lg:self-auto">
           <button
             onClick={() => onViewChange("financeiro")}
             className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden hover:bg-gray-50 ${
