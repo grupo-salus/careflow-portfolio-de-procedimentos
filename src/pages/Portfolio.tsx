@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Menu } from "lucide-react";
+import { Menu, DollarSign, TrendingUp, Briefcase } from "lucide-react";
 import { ViewType, FilterState, Procedure } from "../types/procedure";
 import {
   filterProcedures,
@@ -63,7 +63,7 @@ const Portfolio: React.FC = () => {
   );
 
   return (
-    <div className="h-full bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <HeaderToggle
         currentView={currentView}
         onViewChange={setCurrentView}
@@ -87,7 +87,62 @@ const Portfolio: React.FC = () => {
             isSidebarOpen ? "lg:ml-80" : "ml-0"
           } flex-1`}
         >
-          <div className="mb-6">
+          {/* Header with Title and Toggle */}
+          <div className="mb-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-0 mb-6">
+              {/* Title with Icon */}
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gradient-to-r from-[var(--careflow-primary)] to-[var(--careflow-secondary)] rounded-full flex items-center justify-center">
+                  <Briefcase className="w-4 h-4 text-white" />
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Portfólio de Procedimentos
+                </h1>
+              </div>
+
+              {/* View Toggle */}
+              <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setCurrentView("financeiro")}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden hover:bg-gray-50 ${
+                    currentView === "financeiro"
+                      ? "text-white shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {currentView === "financeiro" && (
+                    <div
+                      className="absolute inset-0 opacity-100 transition-opacity duration-200"
+                      style={{
+                        background: "var(--careflow-gradient)",
+                      }}
+                    />
+                  )}
+                  <DollarSign className="w-4 h-4 relative z-10" />
+                  <span className="relative z-10">Financeiro</span>
+                </button>
+                <button
+                  onClick={() => setCurrentView("comercial")}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden hover:bg-gray-50 ${
+                    currentView === "comercial"
+                      ? "text-white shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {currentView === "comercial" && (
+                    <div
+                      className="absolute inset-0 opacity-100 transition-opacity duration-200"
+                      style={{
+                        background: "var(--careflow-gradient)",
+                      }}
+                    />
+                  )}
+                  <TrendingUp className="w-4 h-4 relative z-10" />
+                  <span className="relative z-10">Comercial</span>
+                </button>
+              </div>
+            </div>
+
             <div>
               <h2 className="text-xl font-semibold text-gray-900">
                 Visão{" "}
