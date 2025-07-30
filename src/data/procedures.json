@@ -7,6 +7,7 @@
     "tempoSessaoMin": 30,
     "descricao": "A depilação a laser da virilha é um procedimento estético que utiliza tecnologia laser para remover pelos de forma definitiva ou semi-permanente. O tratamento é eficaz para reduzir significativamente o crescimento dos pelos, resultando em uma pele mais lisa e sem pelos. Ideal para quem busca uma solução duradoura para a depilação íntima.",
     "tipo": "Entrada",
+    "categoria": "comercial",
     "insumos": [
       {
         "nome": "Gel de contato",
@@ -61,7 +62,8 @@
     "numeroSessoes": 3,
     "tempoSessaoMin": 90,
     "descricao": "A depilação a laser das pernas é um tratamento estético que utiliza tecnologia laser para remover pelos de forma definitiva ou semi-permanente. O procedimento é eficaz para reduzir significativamente o crescimento dos pelos, resultando em pernas mais lisas e sem pelos. Ideal para quem busca uma solução duradoura e eficiente.",
-    "tipo": "Pacote",
+    "tipo": "Recorrência",
+    "categoria": "comercial",
     "insumos": [
       {
         "nome": "Gel de contato",
@@ -117,6 +119,7 @@
     "tempoSessaoMin": 60,
     "descricao": "O preenchimento facial com ácido hialurônico é um procedimento estético que visa restaurar volume, suavizar rugas e linhas de expressão, e melhorar o contorno facial. Utiliza-se ácido hialurônico, uma substância segura e absorvível pelo organismo, para obter resultados naturais e harmoniosos.",
     "tipo": "Alto Ticket",
+    "categoria": "financeiro",
     "insumos": [
       {
         "nome": "Ácido Hialurônico",
@@ -160,6 +163,7 @@
     "tempoSessaoMin": 30,
     "descricao": "A toxina botulínica, comercialmente conhecida como Botox, é utilizada para relaxar os músculos faciais que causam rugas de expressão. A unidade de 50ui é ideal para tratamentos menores e específicos, como rugas entre as sobrancelhas ou pés de galinha. O procedimento é minimamente invasivo e oferece resultados naturais.",
     "tipo": "Alto Ticket",
+    "categoria": "financeiro",
     "insumos": [
       {
         "nome": "Toxina botulínica (Botox Allergan 50ui)",
@@ -211,6 +215,7 @@
     "tempoSessaoMin": 30,
     "descricao": "A toxina botulínica Allergan 100ui é utilizada para relaxar os músculos faciais que causam rugas de expressão. Esta quantidade é versátil para tratar múltiplas áreas da face, incluindo testa, pés de galinha e rugas entre as sobrancelhas. O procedimento oferece resultados naturais e duradouros.",
     "tipo": "Alto Ticket",
+    "categoria": "financeiro",
     "insumos": [
       {
         "nome": "Toxina botulínica (Botox Allergan 100ui)",
@@ -262,6 +267,7 @@
     "tempoSessaoMin": 30,
     "descricao": "A toxina botulínica Xeomin 100ui é uma alternativa ao Botox tradicional, utilizada para relaxar os músculos faciais que causam rugas de expressão. O Xeomin é conhecido por sua pureza e eficácia, sendo ideal para tratar rugas da testa, pés de galinha e linhas entre as sobrancelhas.",
     "tipo": "Alto Ticket",
+    "categoria": "financeiro",
     "insumos": [
       {
         "nome": "Toxina botulínica Xeomin 100ui",
@@ -313,6 +319,7 @@
     "tempoSessaoMin": 30,
     "descricao": "A toxina botulínica Allergan 200ui é utilizada para tratamentos mais extensos de rugas de expressão. Esta quantidade permite tratar múltiplas áreas da face simultaneamente, incluindo testa, pés de galinha, rugas entre as sobrancelhas e outras linhas de expressão. Ideal para casos que requerem maior cobertura.",
     "tipo": "Alto Ticket",
+    "categoria": "financeiro",
     "insumos": [
       {
         "nome": "Toxina botulínica (Botox Allergan 200ui)",
@@ -364,6 +371,7 @@
     "tempoSessaoMin": 30,
     "descricao": "A toxina botulínica Dysport 300ui é uma alternativa ao Botox, utilizada para relaxar os músculos faciais que causam rugas de expressão. O Dysport é conhecido por sua rápida ação e eficácia, sendo ideal para tratar rugas da testa, pés de galinha e outras linhas de expressão faciais.",
     "tipo": "Alto Ticket",
+    "categoria": "financeiro",
     "insumos": [
       {
         "nome": "Toxina botulínica DYSPORT (300ui)",
@@ -415,6 +423,7 @@
     "tempoSessaoMin": 45,
     "descricao": "A toxina botulínica Dysport 500ui é utilizada para tratamentos extensos de rugas de expressão. Esta quantidade permite tratar múltiplas áreas da face simultaneamente, oferecendo uma solução abrangente para rejuvenescimento facial. O Dysport é conhecido por sua eficácia e rápida ação.",
     "tipo": "Alto Ticket",
+    "categoria": "financeiro",
     "insumos": [
       {
         "nome": "Toxina botulínica DYSPORT (300ui)",

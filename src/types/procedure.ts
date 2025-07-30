@@ -11,6 +11,7 @@ export interface Procedure {
   tempoSessaoMin: number;
   descricao: string;
   tipo: 'Alto Ticket' | 'Entrada' | 'Recorrência' | 'Pacote';
+  categoria: 'financeiro' | 'comercial';
   insumos: Insumo[];
   custoProfissionalPorSessao: number;
   labels: string[];

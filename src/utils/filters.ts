@@ -25,17 +25,9 @@ export const filterProcedures = (procedures: Procedure[], filters: FilterState):
 export const groupProceduresByType = (procedures: Procedure[], viewType: 'financeiro' | 'comercial') => {
   const groups: { [key: string]: Procedure[] } = {};
 
-  // Definir quais tipos pertencem a cada visão
-  const financeiroTypes = ['Alto Ticket', 'Entrada'];
-  const comercialTypes = ['Recorrência', 'Pacote'];
-
-  // Filtrar procedimentos baseado na visão
+  // Filtrar procedimentos baseado na categoria
   const filteredProcedures = procedures.filter(procedure => {
-    if (viewType === 'financeiro') {
-      return financeiroTypes.includes(procedure.tipo);
-    } else {
-      return comercialTypes.includes(procedure.tipo);
-    }
+    return procedure.categoria === viewType;
   });
 
   // Agrupar os procedimentos filtrados

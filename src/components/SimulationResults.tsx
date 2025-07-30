@@ -21,8 +21,11 @@ const SimulationResults: React.FC<SimulationResultsProps> = ({
   procedure,
   simulationParams,
 }) => {
+  const algumParametroZerado =
+    !simulationParams.precoSessao || !simulationParams.numeroSessoes;
+
   const simulationResult = useMemo(() => {
-    if (!procedure) return null;
+    if (!procedure || algumParametroZerado) return null;
     try {
       return calcularMargemContribuicao({
         precoSessao: simulationParams.precoSessao,
@@ -32,11 +35,25 @@ const SimulationResults: React.FC<SimulationResultsProps> = ({
         custoProfissionalPorSessao: simulationParams.custoProfissional,
       });
     } catch (error) {
-      return null;
+      return "error";
     }
-  }, [simulationParams, procedure]);
+  }, [simulationParams, procedure, algumParametroZerado]);
 
-  if (!procedure || !simulationResult) {
+  if (!procedure) {
+    return (
+      <div className="bg-white border border-gray-200 p-4 rounded-xl h-full flex flex-col">
+        <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <TrendingUp className="w-4 h-4" />
+          Resultados
+        </h3>
+        <div className="flex-1 flex items-center justify-center text-gray-500">
+          <p className="text-sm">Selecione um procedimento primeiro</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (algumParametroZerado) {
     return (
       <div className="bg-white border border-gray-200 p-4 rounded-xl h-full flex flex-col">
         <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
@@ -45,10 +62,22 @@ const SimulationResults: React.FC<SimulationResultsProps> = ({
         </h3>
         <div className="flex-1 flex items-center justify-center text-gray-500">
           <p className="text-sm">
-            {!procedure
-              ? "Selecione um procedimento primeiro"
-              : "Erro no cálculo"}
+            Preencha os parâmetros para ver os resultados da simulação.
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (simulationResult === "error" || !simulationResult) {
+    return (
+      <div className="bg-white border border-gray-200 p-4 rounded-xl h-full flex flex-col">
+        <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <TrendingUp className="w-4 h-4" />
+          Resultados
+        </h3>
+        <div className="flex-1 flex items-center justify-center text-gray-500">
+          <p className="text-sm">Erro no cálculo</p>
         </div>
       </div>
     );

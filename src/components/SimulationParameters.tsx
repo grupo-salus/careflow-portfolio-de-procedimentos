@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Settings } from "lucide-react";
 import { IMaskInput } from "react-imask";
 import { Procedure } from "../types/procedure";
@@ -23,11 +23,12 @@ const SimulationParameters: React.FC<SimulationParametersProps> = ({
   onParamsChange,
 }) => {
   const setSimulationParams = (updater: any) => {
-    const newParams = typeof updater === 'function' ? updater(simulationParams) : updater;
+    const newParams =
+      typeof updater === "function" ? updater(simulationParams) : updater;
     onParamsChange(newParams);
   };
 
-  // Atualizar parâmetros quando o procedimento mudar
+  // Preencher automaticamente os parâmetros quando um procedimento é selecionado
   useEffect(() => {
     if (procedure) {
       setSimulationParams({
@@ -155,4 +156,4 @@ const SimulationParameters: React.FC<SimulationParametersProps> = ({
   );
 };
 
-export default SimulationParameters; 
+export default SimulationParameters;
