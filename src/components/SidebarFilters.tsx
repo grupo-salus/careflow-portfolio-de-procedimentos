@@ -6,7 +6,6 @@ import {
   Clock,
   DollarSign,
   RotateCcw,
-  X,
 } from "lucide-react";
 import { FilterState } from "../types/procedure";
 import LabelIcon from "./LabelIcon";

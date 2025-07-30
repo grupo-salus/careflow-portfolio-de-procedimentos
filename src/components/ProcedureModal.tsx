@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { X, Tag, Calculator, TrendingUp, Settings } from "lucide-react";
+import { IMaskInput } from "react-imask";
 import { Procedure } from "../types/procedure";
 import {
   calcularMargemContribuicao,
@@ -25,6 +26,7 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
   const [simulationParams, setSimulationParams] = useState({
     precoSessao: procedure?.precoSugerido || 0,
     numeroSessoes: procedure?.numeroSessoes || 1,
+    custoProfissional: procedure?.custoProfissionalPorSessao || 0,
   });
 
   // Atualizar parâmetros quando o procedimento mudar
@@ -33,6 +35,7 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
       setSimulationParams({
         precoSessao: procedure.precoSugerido,
         numeroSessoes: procedure.numeroSessoes,
+        custoProfissional: procedure.custoProfissionalPorSessao,
       });
     }
   }, [procedure]);
@@ -45,7 +48,7 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
         numeroSessoes: simulationParams.numeroSessoes,
         insumos: procedure.insumos,
         tempoSessaoMin: procedure.tempoSessaoMin,
-        custoProfissionalPorSessao: procedure.custoProfissionalPorSessao,
+        custoProfissionalPorSessao: simulationParams.custoProfissional,
       });
     } catch (error) {
       return null;
@@ -173,34 +176,34 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
           {/* Three Columns Layout - Parameters, Breakdown, Results */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Column 1: Simulation Parameters */}
-            <div className="bg-white border border-gray-200 p-4 rounded-xl">
+            <div className="bg-white border border-gray-200 p-4 rounded-xl flex flex-col">
               <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
                 <Settings className="w-4 h-4" />
-                Parâmetros
+                Parâmetros da Simulação
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-3 flex-1">
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">
                     Preço por Sessão
                   </label>
-                  <div className="relative">
-                    <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
-                      R$
-                    </span>
-                    <input
-                      type="number"
-                      value={simulationParams.precoSessao}
-                      onChange={(e) =>
-                        setSimulationParams((prev) => ({
-                          ...prev,
-                          precoSessao: Number(e.target.value) || 0,
-                        }))
-                      }
-                      className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-900 transition-all duration-200 hover:bg-white hover:border-gray-300 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
-                      min="0"
-                      step="0.01"
-                    />
-                  </div>
+                  <IMaskInput
+                    mask={Number}
+                    scale={2}
+                    radix=","
+                    thousandsSeparator="."
+                    padFractionalZeros={true}
+                    prefix="R$ "
+                    unmask={true}
+                    value={String(simulationParams.precoSessao)}
+                    onAccept={(value) =>
+                      setSimulationParams((prev) => ({
+                        ...prev,
+                        precoSessao: Number(value) || 0,
+                      }))
+                    }
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-900 transition-all duration-200 hover:bg-white hover:border-gray-300 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                    placeholder="0,00"
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -220,17 +223,56 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
                     step="1"
                   />
                 </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Custo Profissional por Sessão
+                  </label>
+                  <IMaskInput
+                    mask={Number}
+                    scale={2}
+                    radix=","
+                    thousandsSeparator="."
+                    padFractionalZeros={true}
+                    prefix="R$ "
+                    unmask={true}
+                    value={String(simulationParams.custoProfissional)}
+                    onAccept={(value) =>
+                      setSimulationParams((prev) => ({
+                        ...prev,
+                        custoProfissional: Number(value) || 0,
+                      }))
+                    }
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-900 transition-all duration-200 hover:bg-white hover:border-gray-300 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                    placeholder="0,00"
+                  />
+                </div>
                 <button
                   onClick={() =>
                     setSimulationParams({
                       precoSessao: procedure.precoSugerido,
                       numeroSessoes: procedure.numeroSessoes,
+                      custoProfissional: procedure.custoProfissionalPorSessao,
                     })
                   }
                   className="w-full px-3 py-2 text-xs bg-gray-50 text-gray-700 border border-gray-200 rounded-lg hover:bg-white hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-400"
                 >
                   Restaurar Valores
                 </button>
+              </div>
+              <div className="flex justify-between items-center py-2 pt-3 border-t border-gray-200 mt-2 bg-white sticky bottom-0">
+                <span className="text-sm font-bold text-gray-900">
+                  Tempo por sessão:
+                </span>
+                <span
+                  className="text-sm font-bold bg-clip-text text-transparent"
+                  style={{
+                    background: "var(--careflow-gradient)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  {procedure.tempoSessaoMin} min
+                </span>
               </div>
             </div>
 
@@ -242,11 +284,11 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
               </h3>
               <div className="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 <div className="flex justify-between items-start py-1 border-b border-gray-100">
-                  <span className="text-xs text-gray-600 flex-1 mr-2">
-                    Profissional
+                  <span className="text-xs text-purple-600 flex-1 mr-2 font-medium">
+                    Custo Profissional
                   </span>
-                  <span className="text-sm font-bold flex-shrink-0">
-                    {formatCurrency(procedure.custoProfissionalPorSessao)}
+                  <span className="text-sm font-bold flex-shrink-0 text-purple-600">
+                    {formatCurrency(simulationParams.custoProfissional)}
                   </span>
                 </div>
                 {procedure.insumos.map((insumo, index) => (
@@ -265,11 +307,18 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
               </div>
               <div className="flex justify-between items-center py-2 pt-3 border-t border-gray-200 mt-2 bg-white sticky bottom-0">
                 <span className="text-sm font-bold text-gray-900">
-                  Total/Sessão
+                  Total sessão
                 </span>
-                <span className="text-sm font-bold text-blue-600">
+                <span
+                  className="text-sm font-bold bg-clip-text text-transparent"
+                  style={{
+                    background: "var(--careflow-gradient)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
                   {formatCurrency(
-                    totalInsumosCost + procedure.custoProfissionalPorSessao
+                    totalInsumosCost + simulationParams.custoProfissional
                   )}
                 </span>
               </div>
