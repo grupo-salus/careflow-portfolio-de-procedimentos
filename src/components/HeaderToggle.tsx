@@ -18,6 +18,8 @@ const HeaderToggle: React.FC<HeaderToggleProps> = ({
 }) => {
   const location = useLocation();
   const isPortfolioPage = location.pathname === "/";
+  const isCalculatorPage = location.pathname === "/calculadora";
+  const showSidebarToggle = isPortfolioPage || isCalculatorPage;
 
   return (
     <div
@@ -28,8 +30,8 @@ const HeaderToggle: React.FC<HeaderToggleProps> = ({
       <div className="flex items-center justify-between">
         {/* Left side - Menu and Navigation */}
         <div className="flex items-center gap-6">
-          {/* Menu Burger (only on Portfolio page) */}
-          {isPortfolioPage && (
+          {/* Menu Burger (Portfolio and Calculator pages) */}
+          {showSidebarToggle && (
             <button
               onClick={onToggleSidebar}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"

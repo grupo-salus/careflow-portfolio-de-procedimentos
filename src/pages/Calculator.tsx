@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Procedure } from "../types/procedure";
 import proceduresData from "../data/procedures.json";
 import HeaderToggle from "../components/HeaderToggle";
-import ProcedureSelector from "../components/ProcedureSelector";
+import SidebarCalculator from "../components/SidebarCalculator";
 import SimulationParameters from "../components/SimulationParameters";
 import CostBreakdown from "../components/CostBreakdown";
 import SimulationResults from "../components/SimulationResults";
@@ -16,6 +16,7 @@ const Calculator: React.FC = () => {
     numeroSessoes: 1,
     custoProfissional: 0,
   });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const procedures = proceduresData as Procedure[];
 
@@ -24,12 +25,25 @@ const Calculator: React.FC = () => {
       <HeaderToggle
         currentView="financeiro"
         onViewChange={() => {}}
-        onToggleSidebar={() => {}}
-        isSidebarOpen={false}
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        isSidebarOpen={isSidebarOpen}
       />
 
-      <div className="flex-1 p-6">
-        <div className="max-w-7xl mx-auto">
+      <div className="flex flex-1">
+        <SidebarCalculator
+          procedures={procedures}
+          selectedProcedure={selectedProcedure}
+          onProcedureSelect={setSelectedProcedure}
+          isOpen={isSidebarOpen}
+          onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+        />
+
+        <main
+          className={`transition-all duration-300 p-6 overflow-y-auto ${
+            isSidebarOpen ? "lg:ml-80" : "ml-0"
+          } flex-1`}
+          style={{ height: "calc(100vh - 64px)" }}
+        >
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -41,18 +55,9 @@ const Calculator: React.FC = () => {
             </p>
           </div>
 
-          {/* Grid com 4 colunas - altura ainda menor */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-400px)]">
-            {/* Coluna 1: Selecione o Procedimento */}
-            <div className="lg:col-span-1">
-              <ProcedureSelector
-                procedures={procedures}
-                selectedProcedure={selectedProcedure}
-                onProcedureSelect={setSelectedProcedure}
-              />
-            </div>
-
-            {/* Coluna 2: Parâmetros da Simulação */}
+          {/* Grid com 3 colunas agora */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Coluna 1: Parâmetros da Simulação */}
             <div className="lg:col-span-1">
               <SimulationParameters
                 procedure={selectedProcedure}
@@ -61,7 +66,7 @@ const Calculator: React.FC = () => {
               />
             </div>
 
-            {/* Coluna 3: Breakdown de Custos */}
+            {/* Coluna 2: Breakdown de Custos */}
             <div className="lg:col-span-1">
               <CostBreakdown
                 procedure={selectedProcedure}
@@ -69,7 +74,7 @@ const Calculator: React.FC = () => {
               />
             </div>
 
-            {/* Coluna 4: Resultados */}
+            {/* Coluna 3: Resultados */}
             <div className="lg:col-span-1">
               <SimulationResults
                 procedure={selectedProcedure}
@@ -77,7 +82,7 @@ const Calculator: React.FC = () => {
               />
             </div>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );
