@@ -71,7 +71,7 @@ const Portfolio: React.FC = () => {
         isSidebarOpen={isSidebarOpen}
       />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1">
         <SidebarFilters
           filters={filters}
           onFiltersChange={setFilters}
@@ -86,6 +86,7 @@ const Portfolio: React.FC = () => {
           className={`transition-all duration-300 p-6 overflow-y-auto ${
             isSidebarOpen ? "lg:ml-80" : "ml-0"
           } flex-1`}
+          style={{ height: "calc(100vh - 64px)" }}
         >
           {/* Header with Title and Toggle */}
           <div className="mb-8">
@@ -164,7 +165,7 @@ const Portfolio: React.FC = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-6 pb-8">
               {Object.entries(groupedProcedures).map(
                 ([groupTitle, groupProcedures], index) => (
                   <AccordionGroup
