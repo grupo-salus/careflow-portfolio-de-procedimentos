@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 # Adicionar o diretório do projeto ao path
-project_root = Path(__file__).parent
+project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from sqlalchemy.orm import Session
@@ -84,11 +84,6 @@ def create_admin_user(db: Session):
     else:
         print("❌ Erro ao criar admin")
         return None
-    
-    # Associar admin a todas as empresas e módulos
-    print("🔗 Associando admin a todas as empresas e módulos...")
-    associate_admin_to_all_entities(db, admin_user)
-    print("✅ Admin associado a todas as empresas e módulos")
     
     return admin_user
 
@@ -261,6 +256,12 @@ def main():
             
             # 6. Migrar procedimentos
             migrate_procedures_from_json(db)
+            print()
+            
+            # 7. Associar admin a todas as empresas e módulos
+            print("🔗 Associando admin a todas as empresas e módulos...")
+            associate_admin_to_all_entities(db, admin_user)
+            print("✅ Admin associado a todas as empresas e módulos")
             print()
             
             print("🎉 SETUP COMPLETO CONCLUÍDO COM SUCESSO!")

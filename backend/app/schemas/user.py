@@ -33,6 +33,8 @@ class UserResponse(UserBase):
     is_verified: bool
     created_at: datetime
     updated_at: Optional[datetime] = None
+    empresas: List["EmpresaResponse"] = []
+    modulos: List["ModuloResponse"] = []
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -85,4 +87,5 @@ class UserPermissions(BaseModel):
 from .empresa import EmpresaResponse
 from .modulo import ModuloResponse
 
+UserResponse.model_rebuild()
 UserCompleto.model_rebuild()

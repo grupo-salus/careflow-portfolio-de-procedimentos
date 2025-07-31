@@ -48,7 +48,7 @@ def registrar_usuario(
     return user
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=dict)
 def fazer_login(
     user_login: UserLogin,
     db: Session = Depends(get_db)
@@ -59,7 +59,7 @@ def fazer_login(
     - **email**: Email cadastrado
     - **password**: Senha do usuário
     
-    Retorna um token JWT que deve ser usado nas requisições autenticadas.
+    Retorna um token JWT e dados do usuário que deve ser usado nas requisições autenticadas.
     """
     user_service = UserService(db)
     
@@ -80,7 +80,8 @@ def fazer_login(
     
     return {
         "access_token": access_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "user": UserResponse.from_orm(user)
     }
 
 
@@ -123,7 +124,20 @@ def obter_usuario_atual(current_user: User = Depends(get_current_active_user)):
     
     Requer token de autenticação válido.
     """
-    return current_user
+    # Forçar o carregamento dos relacionamentos
+    from sqlalchemy.orm import joinedload
+    from ..core.database import SessionLocal
+    
+    db = SessionLocal()
+    try:
+        user_with_relations = db.query(User).options(
+            joinedload(User.empresas),
+            joinedload(User.modulos)
+        ).filter(User.id == current_user.id).first()
+        
+        return UserResponse.from_orm(user_with_relations)
+    finally:
+        db.close()
 
 
 @router.get("/me/permissions", response_model=UserPermissions)
@@ -166,3 +180,23 @@ def atualizar_meu_perfil(
         )
     
     return updated_user
+
+
+@router.post("/logout")
+def fazer_logout(current_user: User = Depends(get_current_active_user)):
+    """
+    Fazer logout do usuário
+    
+    Em uma implementação real, você pode querer invalidar o token no servidor.
+    Por enquanto, apenas retornamos sucesso e o cliente remove o token.
+    """
+    # Em uma implementação mais robusta, você poderia:
+    # 1. Adicionar o token a uma blacklist
+    # 2. Registrar o logout no banco de dados
+    # 3. Invalidar sessões ativas
+    
+    return {
+        "message": "Logout realizado com sucesso",
+        "user_id": current_user.id,
+        "email": current_user.email
+    }

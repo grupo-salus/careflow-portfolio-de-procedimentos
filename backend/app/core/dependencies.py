@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from .database import get_db
 from .security import verify_token
 from ..services.user_service import UserService
@@ -26,9 +26,12 @@ def get_current_user(
     if email is None:
         raise credentials_exception
     
-    # Buscar usuário
-    user_service = UserService(db)
-    user = user_service.get_user_by_email(email)
+    # Buscar usuário com relacionamentos
+    user = db.query(User).options(
+        joinedload(User.empresas),
+        joinedload(User.modulos)
+    ).filter(User.email == email).first()
+    
     if user is None:
         raise credentials_exception
     
