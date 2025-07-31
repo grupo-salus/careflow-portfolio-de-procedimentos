@@ -26,19 +26,19 @@ const SimulationParameters: React.FC<SimulationParametersProps> = ({
         typeof updater === "function" ? updater(simulationParams) : updater;
       onParamsChange(newParams);
     },
-    [simulationParams, onParamsChange]
+    [onParamsChange]
   );
 
   // Preencher automaticamente os parâmetros quando um procedimento é selecionado
   useEffect(() => {
     if (procedure) {
-      setSimulationParams({
+      onParamsChange({
         precoSessao: procedure.precoSugerido,
         numeroSessoes: procedure.numeroSessoes,
         custoProfissional: procedure.custoProfissionalPorSessao,
       });
     }
-  }, [procedure, setSimulationParams]);
+  }, [procedure, onParamsChange]);
 
   if (!procedure) {
     return (

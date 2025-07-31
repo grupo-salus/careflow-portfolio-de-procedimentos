@@ -150,25 +150,31 @@ const ProcedureModal: React.FC<ProcedureModalProps> = ({
           </div>
 
           {/* Three Columns Layout - Parameters, Breakdown, Results */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Column 1: Simulation Parameters */}
-            <SimulationParameters
-              procedure={procedure}
-              simulationParams={simulationParams}
-              onParamsChange={setSimulationParams}
-            />
+            <div className="md:col-span-1">
+              <SimulationParameters
+                procedure={procedure}
+                simulationParams={simulationParams}
+                onParamsChange={setSimulationParams}
+              />
+            </div>
 
             {/* Column 2: Cost Breakdown */}
-            <CostBreakdown
-              procedure={procedure}
-              simulationParams={simulationParams}
-            />
+            <div className="md:col-span-1">
+              <CostBreakdown
+                procedure={procedure}
+                simulationParams={simulationParams}
+              />
+            </div>
 
             {/* Column 3: Simulation Results */}
-            <SimulationResults
-              procedure={procedure}
-              simulationParams={simulationParams}
-            />
+            <div className="md:col-span-2 lg:col-span-1">
+              <SimulationResults
+                procedure={procedure}
+                simulationParams={simulationParams}
+              />
+            </div>
           </div>
         </div>
       </div>

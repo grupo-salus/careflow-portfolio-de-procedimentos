@@ -16,7 +16,7 @@ const ProcedureCard: React.FC<ProcedureCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 cursor-pointer group relative"
+      className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-lg transition-all duration-300 cursor-pointer group relative"
     >
       {/* Gradiente overlay para a borda no hover */}
       <div
@@ -31,13 +31,14 @@ const ProcedureCard: React.FC<ProcedureCardProps> = ({
       </div>
 
       <div className="relative z-10">
-        <div className="flex justify-between items-start mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+        {/* Header com Nome e Tipo - Sempre visível */}
+        <div className="mb-3">
+          <h3 className="text-base font-semibold text-gray-900 line-clamp-2 mb-2">
             {procedure.nome}
           </h3>
-          <div className="flex-shrink-0 ml-4">
+          <div className="flex-shrink-0">
             <span
-              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border shadow-sm"
+              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shadow-sm"
               style={getTipoColors(procedure.tipo)}
             >
               {procedure.tipo}
@@ -45,45 +46,48 @@ const ProcedureCard: React.FC<ProcedureCardProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="flex items-center gap-2 text-gray-600">
-            <Clock className="w-4 h-4" />
-            <span className="text-sm">{procedure.tempoSessaoMin} min</span>
+        {/* Detalhes do Procedimento - Apenas em telas médias e grandes */}
+        <div className="hidden md:block">
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="flex items-center gap-2 text-gray-600">
+              <Clock className="w-4 h-4" />
+              <span className="text-sm">{procedure.tempoSessaoMin} min</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <DollarSign className="w-4 h-4" />
+              <span className="text-sm font-medium">
+                R$ {procedure.precoSugerido.toFixed(0)}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <Users className="w-4 h-4" />
+              <span className="text-sm">
+                {procedure.numeroSessoes} sessão
+                {procedure.numeroSessoes > 1 ? "ões" : ""}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <Tag className="w-4 h-4" />
+              <span className="text-sm">{procedure.labels.length} labels</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <DollarSign className="w-4 h-4" />
-            <span className="text-sm font-medium">
-              R$ {procedure.precoSugerido.toFixed(0)}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <Users className="w-4 h-4" />
-            <span className="text-sm">
-              {procedure.numeroSessoes} sessão
-              {procedure.numeroSessoes > 1 ? "ões" : ""}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <Tag className="w-4 h-4" />
-            <span className="text-sm">{procedure.labels.length} labels</span>
-          </div>
-        </div>
 
-        <div className="flex flex-wrap gap-2">
-          {procedure.labels.slice(0, 4).map((label, index) => (
-            <div
-              key={index}
-              className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs"
-            >
-              <LabelIcon label={label} size="sm" />
-              <span className="capitalize">{label}</span>
-            </div>
-          ))}
-          {procedure.labels.length > 4 && (
-            <div className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-500 rounded-full text-xs">
-              +{procedure.labels.length - 4} mais
-            </div>
-          )}
+          <div className="flex flex-wrap gap-2">
+            {procedure.labels.slice(0, 4).map((label, index) => (
+              <div
+                key={index}
+                className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs"
+              >
+                <LabelIcon label={label} size="sm" />
+                <span className="capitalize">{label}</span>
+              </div>
+            ))}
+            {procedure.labels.length > 4 && (
+              <div className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-500 rounded-full text-xs">
+                +{procedure.labels.length - 4} mais
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

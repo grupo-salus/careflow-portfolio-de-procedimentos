@@ -50,10 +50,10 @@ const Calculator: React.FC<CalculatorProps> = ({ isSidebarOpen = true, onToggleS
           </div>
         </div>
 
-        {/* Grid com 3 colunas agora */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Grid responsivo */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Coluna 1: Parâmetros da Simulação */}
-          <div className="lg:col-span-1">
+          <div className="md:col-span-1">
             <SimulationParameters
               procedure={selectedProcedure}
               simulationParams={simulationParams}
@@ -62,7 +62,7 @@ const Calculator: React.FC<CalculatorProps> = ({ isSidebarOpen = true, onToggleS
           </div>
 
           {/* Coluna 2: Breakdown de Custos */}
-          <div className="lg:col-span-1">
+          <div className="md:col-span-1">
             <CostBreakdown
               procedure={selectedProcedure}
               simulationParams={simulationParams}
@@ -70,7 +70,7 @@ const Calculator: React.FC<CalculatorProps> = ({ isSidebarOpen = true, onToggleS
           </div>
 
           {/* Coluna 3: Resultados */}
-          <div className="lg:col-span-1">
+          <div className="md:col-span-2 lg:col-span-1">
             <SimulationResults
               procedure={selectedProcedure}
               simulationParams={simulationParams}
