@@ -8,7 +8,7 @@ from typing import List
 from ..core.database import get_db
 from ..core.permissions import require_admin, PermissionChecker
 from ..schemas.user import (
-    UserResponse, UserCompleto, UserUpdate, 
+    UserResponse, UserCompleto, UserUpdate, UserCreate,
     UserEmpresaAssociation, UserModuloAssociation, UserPermissions
 )
 from ..schemas.empresa import EmpresaResponse
@@ -57,6 +57,28 @@ def obter_usuario_completo(
         )
     
     return user
+
+
+@router.post("/users", response_model=UserResponse)
+def criar_usuario_admin(
+    user_create: UserCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
+    """
+    Criar novo usuário (apenas admins)
+    """
+    user_service = UserService(db)
+    
+    # Criar usuário
+    created_user = user_service.create_user(user_create, setup_default_permissions=False)
+    if not created_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Erro ao criar usuário"
+        )
+    
+    return created_user
 
 
 @router.put("/users/{user_id}", response_model=UserResponse)
@@ -181,6 +203,83 @@ def desativar_usuario(
         )
     
     return {"message": "Usuário desativado com sucesso"}
+
+
+@router.delete("/users/{user_id}")
+def deletar_usuario_admin(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
+    """
+    Deletar um usuário (apenas admins)
+    """
+    # Verificar se não está tentando deletar a si mesmo
+    if user_id == current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Você não pode deletar a si mesmo"
+        )
+    
+    user_service = UserService(db)
+    
+    # Verificar se usuário existe
+    user_to_delete = user_service.get_user_by_id(user_id)
+    if not user_to_delete:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuário não encontrado"
+        )
+    
+    # Deletar usuário
+    if not user_service.delete_user(user_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Erro ao deletar usuário"
+        )
+    
+    return {"message": "Usuário deletado com sucesso"}
+
+
+@router.post("/users/{user_id}/reset-password")
+def resetar_senha_usuario_admin(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
+    """
+    Resetar senha de um usuário (apenas admins)
+    """
+    user_service = UserService(db)
+    
+    # Verificar se usuário existe
+    user_to_reset = user_service.get_user_by_id(user_id)
+    if not user_to_reset:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuário não encontrado"
+        )
+    
+    # Gerar nova senha aleatória
+    import secrets
+    import string
+    new_password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
+    
+    # Atualizar senha do usuário
+    from ..schemas.user import UserUpdate
+    user_update = UserUpdate(password=new_password)
+    
+    updated_user = user_service.update_user(user_id, user_update)
+    if not updated_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Erro ao resetar senha"
+        )
+    
+    return {
+        "message": "Senha resetada com sucesso",
+        "new_password": new_password
+    }
 
 
 @router.get("/users/{user_id}/permissions", response_model=UserPermissions)

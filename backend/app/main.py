@@ -4,7 +4,7 @@ from .core.config import settings
 from .core.database import engine
 from .models import *  # Importar todos os modelos para criar as tabelas
 from .models.user import Base
-from .routers import auth, admin, empresa, modulo
+from .routers import auth, admin, empresa, modulo, admin_modules
 
 # Criar as tabelas no banco de dados
 Base.metadata.create_all(bind=engine)
@@ -32,6 +32,7 @@ app.include_router(auth.router, prefix="/api/v1")
 app.include_router(admin.router, prefix="/api/v1")
 app.include_router(empresa.router, prefix="/api/v1")
 app.include_router(modulo.router, prefix="/api/v1")
+app.include_router(admin_modules.router, prefix="/api/v1")
 
 # Importar e incluir novos routers
 from .routers import procedimento, insumo

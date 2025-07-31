@@ -1,7 +1,6 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, validator
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel, EmailStr, ConfigDict
 
 from ..models.user import UserRole
 
@@ -16,6 +15,18 @@ class UserBase(BaseModel):
 # Schema para criação de usuário
 class UserCreate(UserBase):
     password: str
+    
+    @validator('password')
+    def validate_password(cls, v):
+        if len(v) < 8:
+            raise ValueError('A senha deve ter pelo menos 8 caracteres')
+        if not any(c.isupper() for c in v):
+            raise ValueError('A senha deve conter pelo menos uma letra maiúscula')
+        if not any(c.islower() for c in v):
+            raise ValueError('A senha deve conter pelo menos uma letra minúscula')
+        if not any(c.isdigit() for c in v):
+            raise ValueError('A senha deve conter pelo menos um número')
+        return v
 
 
 # Schema para atualização de usuário
@@ -24,6 +35,20 @@ class UserUpdate(BaseModel):
     full_name: Optional[str] = None
     password: Optional[str] = None
     role: Optional[UserRole] = None
+    
+    @validator('password')
+    def validate_password(cls, v):
+        if v is None:
+            return v
+        if len(v) < 8:
+            raise ValueError('A senha deve ter pelo menos 8 caracteres')
+        if not any(c.isupper() for c in v):
+            raise ValueError('A senha deve conter pelo menos uma letra maiúscula')
+        if not any(c.islower() for c in v):
+            raise ValueError('A senha deve conter pelo menos uma letra minúscula')
+        if not any(c.isdigit() for c in v):
+            raise ValueError('A senha deve conter pelo menos um número')
+        return v
 
 
 # Schema para resposta básica do usuário (sem senha)

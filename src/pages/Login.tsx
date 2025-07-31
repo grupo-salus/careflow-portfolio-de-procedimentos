@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getLogoUrl } from '../utils/imageUtils';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import Alert from '../components/Alert';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -14,9 +15,23 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    
+    // Validação básica dos campos
+    if (!email.trim()) {
+      setError('Por favor, informe seu email.');
+      return;
+    }
+    
+    if (!password.trim()) {
+      setError('Por favor, informe sua senha.');
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
@@ -24,11 +39,25 @@ const Login: React.FC = () => {
       if (success) {
         // Redirecionar para o primeiro módulo disponível ou dashboard
         navigate('/portfolio');
-      } else {
-        setError('Credenciais inválidas. Verifique seu email e senha.');
       }
-    } catch (err) {
-      setError('Erro ao fazer login. Tente novamente.');
+    } catch (err: any) {
+      // Capturar mensagens de erro mais específicas
+      let errorMessage = 'Credenciais inválidas. Verifique seu email e senha.';
+      
+      if (err.message) {
+        errorMessage = err.message;
+      } else if (err.detail) {
+        errorMessage = err.detail;
+      }
+      
+      // Melhorar mensagens específicas
+      if (errorMessage.includes('Email ou senha incorretos')) {
+        errorMessage = 'Email ou senha incorretos. Verifique suas credenciais.';
+      } else if (errorMessage.includes('Credenciais inválidas')) {
+        errorMessage = 'Credenciais inválidas. Verifique seu email e senha.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -102,7 +131,10 @@ const Login: React.FC = () => {
                     autoComplete="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (error) setError('');
+                    }}
                     className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors bg-white"
                     placeholder="seu@email.com"
                   />
@@ -125,7 +157,10 @@ const Login: React.FC = () => {
                     autoComplete="current-password"
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (error) setError('');
+                    }}
                     className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors bg-white"
                     placeholder="••••••••"
                   />
@@ -146,13 +181,15 @@ const Login: React.FC = () => {
 
             {/* Erro */}
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm flex items-center">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {error}
-              </div>
+              <Alert
+                type="error"
+                message={error}
+                onClose={() => setError('')}
+                autoClose={false}
+              />
             )}
+            
+
 
             {/* Botão de Login */}
             <div>

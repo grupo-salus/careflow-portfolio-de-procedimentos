@@ -275,7 +275,7 @@ def main():
             
             print("\n🔑 Credenciais de acesso:")
             print("   Email: admin@careflow.com")
-            print("   Senha: admin123456")
+            print("   Senha: CareFlow123!")
             
             print("\n⚠️  PRÓXIMOS PASSOS:")
             print("   1. Altere a senha do administrador")

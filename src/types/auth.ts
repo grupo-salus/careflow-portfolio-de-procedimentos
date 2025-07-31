@@ -2,7 +2,7 @@ export interface User {
   id: number;
   email: string;
   full_name: string;
-  role: 'ADMIN' | 'USER';
+  role: 'admin' | 'comum';
   empresas: Empresa[];
   modulos: Modulo[];
 }

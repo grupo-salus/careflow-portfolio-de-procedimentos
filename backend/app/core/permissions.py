@@ -74,6 +74,35 @@ def require_modulo_access(modulo_slug: str):
     return _check_modulo_access
 
 
+def require_admin_or_modulo_access(modulo_slug: str):
+    """Factory para criar dependency que verifica se é admin OU tem acesso ao módulo"""
+    def _check_admin_or_modulo_access(
+        current_user: User = Depends(get_current_user),
+        permission_service: PermissionService = Depends(get_permission_service)
+    ) -> User:
+        # Se é admin, permite acesso
+        if current_user.is_admin():
+            return current_user
+        
+        # Se não é admin, verifica se o módulo é administrativo
+        if modulo_slug.startswith('admin_') or modulo_slug == 'configuracoes':
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Acesso negado. Apenas administradores podem acessar módulos administrativos."
+            )
+        
+        # Se não é módulo administrativo, verifica se tem acesso
+        if not permission_service.user_can_access_modulo(current_user, modulo_slug):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Acesso negado. Você não tem permissão para acessar o módulo '{modulo_slug}'."
+            )
+        
+        return current_user
+    
+    return _check_admin_or_modulo_access
+
+
 def filter_empresas_by_permission(
     empresas_ids: List[int],
     current_user: User = Depends(get_current_user),

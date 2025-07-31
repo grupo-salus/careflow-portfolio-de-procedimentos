@@ -166,3 +166,31 @@ class UserService:
             "ativos": ativos,
             "inativos": total - ativos
         }
+    
+    def delete_user(self, user_id: int) -> bool:
+        """Deletar usuário permanentemente"""
+        user = self.get_user_by_id(user_id)
+        if not user:
+            return False
+        
+        try:
+            # Remover TODAS as associações de forma explícita
+            from ..models.associations import usuario_empresas, usuario_modulos
+            
+            # Remover associações com empresas
+            self.db.execute(
+                usuario_empresas.delete().where(usuario_empresas.c.user_id == user_id)
+            )
+            
+            # Remover associações com módulos
+            self.db.execute(
+                usuario_modulos.delete().where(usuario_modulos.c.user_id == user_id)
+            )
+            
+            # Deletar o usuário
+            self.db.delete(user)
+            self.db.commit()
+            return True
+        except IntegrityError:
+            self.db.rollback()
+            return False

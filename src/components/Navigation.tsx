@@ -64,10 +64,12 @@ const Navigation: React.FC<NavigationProps> = ({ onToggleSidebar, isSidebarOpen 
     !modulo.slug.includes('admin') && modulo.slug !== 'configuracoes'
   );
 
-  // Módulos administrativos
-  const adminModules = sortedModules.filter(modulo => 
-    modulo.slug.includes('admin') || modulo.slug === 'configuracoes'
-  );
+  // Módulos administrativos - apenas para usuários admin
+  const adminModules = user?.role === 'admin' 
+    ? sortedModules.filter(modulo => 
+        modulo.slug.includes('admin') || modulo.slug === 'configuracoes'
+      )
+    : [];
 
   return (
     <nav className="bg-white border-b border-gray-200 px-6 py-4 relative">

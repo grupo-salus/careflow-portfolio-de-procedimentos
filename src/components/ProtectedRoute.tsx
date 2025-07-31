@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Modulo } from '../types/auth';
+import AccessDenied from '../pages/AccessDenied';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -42,24 +43,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
 
     if (!hasModuleAccess) {
-      // Redirecionar para o primeiro módulo disponível ou mostrar erro
-      const firstModule = user.modulos.sort((a, b) => a.ordem - b.ordem)[0];
-      if (firstModule) {
-        return <Navigate to={`/${firstModule.slug}`} replace />;
-      } else {
-        return (
-          <div className="min-h-screen flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Acesso Negado
-              </h2>
-              <p className="text-gray-600">
-                Você não tem permissão para acessar este módulo.
-              </p>
-            </div>
-          </div>
-        );
-      }
+      // Mostrar página de acesso negado com logout obrigatório
+      return <AccessDenied />;
     }
   }
 

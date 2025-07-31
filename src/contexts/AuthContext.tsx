@@ -24,15 +24,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     try {
-      setIsLoading(true);
+      // Não alterar o isLoading global durante o login
       const response = await apiService.login(credentials);
       setUser(response.user);
       return true;
     } catch (error) {
-      console.error('Erro no login:', error);
-      return false;
-    } finally {
-      setIsLoading(false);
+      // Não fazer console.error aqui, deixar o componente Login tratar o erro
+      throw error;
     }
   };
 

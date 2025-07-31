@@ -6,6 +6,8 @@ import Navigation from './components/Navigation';
 import Login from './pages/Login';
 import Portfolio from './pages/Portfolio';
 import Calculator from './pages/Calculator';
+import AdminPanel from './pages/AdminPanel';
+import AccessDenied from './pages/AccessDenied';
 
 // Layout principal com navegação
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -102,14 +104,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/admin_usuarios" element={
         <ProtectedRoute requiredModule="admin_usuarios">
           <MainLayout>
-            <div className="text-center py-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Gerenciar Usuários
-              </h2>
-              <p className="text-gray-600">
-                Funcionalidade em desenvolvimento...
-              </p>
-            </div>
+            <AdminPanel />
           </MainLayout>
         </ProtectedRoute>
       } />
@@ -143,6 +138,9 @@ const AppRoutes: React.FC = () => {
           </MainLayout>
         </ProtectedRoute>
       } />
+      
+      {/* Rota para acesso negado */}
+      <Route path="/access-denied" element={<AccessDenied />} />
       
       {/* Rota 404 */}
       <Route path="*" element={
