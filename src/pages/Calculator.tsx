@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Calculator as CalculatorIcon } from "lucide-react";
 import { Procedure } from "../types/procedure";
 import proceduresData from "../data/procedures.json";
 import HeaderToggle from "../components/HeaderToggle";
@@ -46,13 +47,14 @@ const Calculator: React.FC = () => {
         >
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Simulador de Margem de Contribuição
-            </h1>
-            <p className="text-gray-600">
-              Calcule a margem de contribuição dos seus procedimentos de forma
-              dinâmica
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-[var(--careflow-primary)] to-[var(--careflow-secondary)] rounded-full flex items-center justify-center">
+                <CalculatorIcon className="w-4 h-4 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Simulador de Margem de Contribuição
+              </h1>
+            </div>
           </div>
 
           {/* Grid com 3 colunas agora */}

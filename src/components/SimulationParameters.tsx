@@ -41,20 +41,24 @@ const SimulationParameters: React.FC<SimulationParametersProps> = ({
 
   if (!procedure) {
     return (
-      <div className="bg-white border border-gray-200 p-4 rounded-xl h-full flex flex-col">
+      <div className="bg-white p-4 rounded-xl min-h-96 flex flex-col relative overflow-hidden" style={{ background: 'linear-gradient(white, white) padding-box, linear-gradient(120deg, #683fe7 15%, #ca2cb2 50%, #fd9010 100%) border-box', border: '2px solid transparent' }}>
         <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
           <Settings className="w-4 h-4" />
           Parâmetros da Simulação
         </h3>
-        <div className="flex-1 flex items-center justify-center text-gray-500">
-          <p className="text-sm">Selecione um procedimento primeiro</p>
+        <div className="flex-1 flex flex-col items-center justify-center text-gray-500">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <Settings className="w-8 h-8 text-gray-400" />
+          </div>
+          <p className="text-sm text-center">Selecione um procedimento primeiro</p>
+          <p className="text-xs text-gray-400 mt-1 text-center">Configure os parâmetros após a seleção</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-gray-200 p-4 rounded-xl h-full flex flex-col">
+    <div className="bg-white p-4 rounded-xl h-full flex flex-col relative overflow-hidden" style={{ background: 'linear-gradient(white, white) padding-box, linear-gradient(120deg, #683fe7 15%, #ca2cb2 50%, #fd9010 100%) border-box', border: '2px solid transparent' }}>
       <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
         <Settings className="w-4 h-4" />
         Parâmetros da Simulação
