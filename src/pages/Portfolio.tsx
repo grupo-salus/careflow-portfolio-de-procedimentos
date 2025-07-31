@@ -8,19 +8,22 @@ import {
   getPriceRange,
   getTimeRange,
 } from "../utils/filters";
-import HeaderToggle from "../components/HeaderToggle";
 import SidebarFilters from "../components/SidebarFilters";
 import AccordionGroup from "../components/AccordionGroup";
 import ProcedureModal from "../components/ProcedureModal";
 import proceduresData from "../data/procedures.json";
 
-const Portfolio: React.FC = () => {
+interface PortfolioProps {
+  isSidebarOpen?: boolean;
+  onToggleSidebar?: () => void;
+}
+
+const Portfolio: React.FC<PortfolioProps> = ({ isSidebarOpen = true, onToggleSidebar }) => {
   const [currentView, setCurrentView] = useState<ViewType>("financeiro");
   const [selectedProcedure, setSelectedProcedure] = useState<Procedure | null>(
     null
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const procedures = proceduresData as Procedure[];
 
@@ -63,13 +66,8 @@ const Portfolio: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <HeaderToggle
-        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-        isSidebarOpen={isSidebarOpen}
-      />
-
-      <div className="flex flex-1">
+    <>
+      <div className="flex flex-1 h-full overflow-hidden">
         <SidebarFilters
           filters={filters}
           onFiltersChange={setFilters}
@@ -77,14 +75,12 @@ const Portfolio: React.FC = () => {
           priceRange={priceRange}
           timeRange={timeRange}
           isOpen={isSidebarOpen}
-          onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+          onToggle={onToggleSidebar || (() => {})}
         />
 
         <main
-          className={`transition-all duration-300 p-6 overflow-y-auto ${
-            isSidebarOpen ? "lg:ml-80" : "ml-0"
-          } flex-1`}
-          style={{ height: "calc(100vh - 64px)" }}
+          className={`transition-all duration-300 p-6 overflow-y-auto flex-1`}
+          style={{ height: "100%", maxHeight: "100vh" }}
         >
           {/* Header with Title and Toggle */}
           <div className="mb-8">
@@ -185,7 +181,7 @@ const Portfolio: React.FC = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </div>
+    </>
   );
 };
 
