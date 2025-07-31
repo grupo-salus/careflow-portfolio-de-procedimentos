@@ -21,7 +21,7 @@ from app.models.associations import ProcedimentoInsumo
 
 def load_procedures_json():
     """Carregar dados do arquivo JSON do frontend"""
-    json_path = project_root.parent / "src" / "data" / "procedures.json"
+    json_path = project_root.parent.parent / "src" / "data" / "procedures.json"
     
     if not json_path.exists():
         print(f"❌ Arquivo não encontrado: {json_path}")

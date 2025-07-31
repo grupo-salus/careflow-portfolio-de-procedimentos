@@ -32,6 +32,23 @@ from app.schemas.empresa import EmpresaCreate
 from app.schemas.modulo import ModuloCreate
 
 
+def associate_admin_to_all_entities(db: Session, admin_user: User):
+    """Associar o usuário admin a todas as empresas e módulos"""
+    # Associar a todas as empresas
+    empresas = db.query(Empresa).all()
+    for empresa in empresas:
+        if empresa not in admin_user.empresas:
+            admin_user.empresas.append(empresa)
+    
+    # Associar a todos os módulos
+    modulos = db.query(Modulo).all()
+    for modulo in modulos:
+        if modulo not in admin_user.modulos:
+            admin_user.modulos.append(modulo)
+    
+    db.commit()
+
+
 def recreate_database():
     """Recriar todas as tabelas do banco de dados"""
     print("🗑️  Removendo tabelas existentes...")
@@ -49,11 +66,11 @@ def create_admin_user(db: Session):
     
     user_service = UserService(db)
     
-    # Criar admin
+    # Criar admin com senha que atende aos requisitos de segurança
     admin_data = UserCreate(
         email="admin@careflow.com",
         full_name="Administrador do Sistema",
-        password="admin123456",  # MUDAR EM PRODUÇÃO!
+        password="CareFlow123!",  # Senha que atende aos requisitos: maiúscula, minúscula, número
         role=UserRole.ADMIN
     )
     
@@ -63,10 +80,15 @@ def create_admin_user(db: Session):
         print(f"  ✅ Admin criado: {admin_user.email}")
         print("  ⚠️  IMPORTANTE: Altere a senha padrão!")
         print("     Email: admin@careflow.com")
-        print("     Senha: admin123456")
+        print("     Senha: CareFlow123!")
     else:
-        print("  ❌ Erro ao criar usuário admin")
+        print("❌ Erro ao criar admin")
         return None
+    
+    # Associar admin a todas as empresas e módulos
+    print("🔗 Associando admin a todas as empresas e módulos...")
+    associate_admin_to_all_entities(db, admin_user)
+    print("✅ Admin associado a todas as empresas e módulos")
     
     return admin_user
 
