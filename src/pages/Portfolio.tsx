@@ -65,8 +65,6 @@ const Portfolio: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <HeaderToggle
-        currentView={currentView}
-        onViewChange={setCurrentView}
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         isSidebarOpen={isSidebarOpen}
       />

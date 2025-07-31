@@ -1,18 +1,13 @@
 import React from "react";
 import { Briefcase, Calculator } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { ViewType } from "../types/procedure";
 
 interface HeaderToggleProps {
-  currentView: ViewType;
-  onViewChange: (view: ViewType) => void;
   onToggleSidebar: () => void;
   isSidebarOpen: boolean;
 }
 
 const HeaderToggle: React.FC<HeaderToggleProps> = ({
-  currentView,
-  onViewChange,
   onToggleSidebar,
   isSidebarOpen,
 }) => {

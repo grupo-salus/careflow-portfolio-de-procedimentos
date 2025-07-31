@@ -12,8 +12,6 @@ import {
   Palette,
   Star,
   Sun,
-  Moon,
-  Flower,
   Gem,
   Leaf,
 } from "lucide-react";

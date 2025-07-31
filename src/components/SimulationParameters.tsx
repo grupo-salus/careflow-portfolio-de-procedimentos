@@ -1,20 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { Settings } from "lucide-react";
 import { IMaskInput } from "react-imask";
 import { Procedure } from "../types/procedure";
 
+type SimulationParams = {
+  precoSessao: number;
+  numeroSessoes: number;
+  custoProfissional: number;
+};
+
 interface SimulationParametersProps {
   procedure: Procedure | null;
-  simulationParams: {
-    precoSessao: number;
-    numeroSessoes: number;
-    custoProfissional: number;
-  };
-  onParamsChange: (params: {
-    precoSessao: number;
-    numeroSessoes: number;
-    custoProfissional: number;
-  }) => void;
+  simulationParams: SimulationParams;
+  onParamsChange: (params: SimulationParams) => void;
 }
 
 const SimulationParameters: React.FC<SimulationParametersProps> = ({
@@ -22,11 +20,14 @@ const SimulationParameters: React.FC<SimulationParametersProps> = ({
   simulationParams,
   onParamsChange,
 }) => {
-  const setSimulationParams = (updater: any) => {
-    const newParams =
-      typeof updater === "function" ? updater(simulationParams) : updater;
-    onParamsChange(newParams);
-  };
+  const setSimulationParams = useCallback(
+    (updater: SimulationParams | ((prev: SimulationParams) => SimulationParams)) => {
+      const newParams =
+        typeof updater === "function" ? updater(simulationParams) : updater;
+      onParamsChange(newParams);
+    },
+    [simulationParams, onParamsChange]
+  );
 
   // Preencher automaticamente os parâmetros quando um procedimento é selecionado
   useEffect(() => {
@@ -37,7 +38,7 @@ const SimulationParameters: React.FC<SimulationParametersProps> = ({
         custoProfissional: procedure.custoProfissionalPorSessao,
       });
     }
-  }, [procedure]);
+  }, [procedure, setSimulationParams]);
 
   if (!procedure) {
     return (

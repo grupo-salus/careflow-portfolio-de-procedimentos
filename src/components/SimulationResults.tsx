@@ -34,7 +34,7 @@ const SimulationResults: React.FC<SimulationResultsProps> = ({
         tempoSessaoMin: procedure.tempoSessaoMin,
         custoProfissionalPorSessao: simulationParams.custoProfissional,
       });
-    } catch (error) {
+    } catch {
       return "error";
     }
   }, [simulationParams, procedure, algumParametroZerado]);

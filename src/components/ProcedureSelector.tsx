@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import { Search, X } from "lucide-react";
 import { Procedure } from "../types/procedure";
 import { getTipoColors } from "../utils/typeColors";
-import { getProcedureImageUrl } from "../utils/imageUtils";
 
 interface ProcedureSelectorProps {
   procedures: Procedure[];
