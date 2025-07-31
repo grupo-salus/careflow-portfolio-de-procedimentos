@@ -144,10 +144,6 @@ const Portfolio: React.FC = () => {
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
-                Visão{" "}
-                {currentView === "financeiro" ? "Financeira" : "Comercial"}
-              </h2>
               <p className="text-sm text-gray-600 mt-1">
                 {totalProcedures} procedimento{totalProcedures !== 1 ? "s" : ""}{" "}
                 encontrado{totalProcedures !== 1 ? "s" : ""}
