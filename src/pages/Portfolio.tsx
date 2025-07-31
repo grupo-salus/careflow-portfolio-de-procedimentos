@@ -87,7 +87,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ isSidebarOpen = true, onToggleSid
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-0 mb-6">
               {/* Title with Icon */}
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-[var(--careflow-primary)] to-[var(--careflow-secondary)] rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 min-w-8 min-h-8 bg-gradient-to-r from-[var(--careflow-primary)] to-[var(--careflow-secondary)] rounded-full flex items-center justify-center flex-shrink-0">
                   <Briefcase className="w-4 h-4 text-white" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900">

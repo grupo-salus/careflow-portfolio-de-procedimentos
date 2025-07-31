@@ -3,12 +3,16 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Modulo } from '../types/auth';
 import { getLogoUrl } from '../utils/imageUtils';
+import { LogOut, ChevronDown } from 'lucide-react';
+import { Menu, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
 
 interface NavigationProps {
-  // Removidas as props de sidebar toggle
+  onToggleSidebar?: () => void;
+  isSidebarOpen?: boolean;
 }
 
-const Navigation: React.FC<NavigationProps> = () => {
+const Navigation: React.FC<NavigationProps> = ({ onToggleSidebar, isSidebarOpen }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -55,15 +59,60 @@ const Navigation: React.FC<NavigationProps> = () => {
     return icons[iconName] || icons.folder;
   };
 
+  // Filtrar apenas módulos não administrativos para o navbar
+  const nonAdminModules = sortedModules.filter(modulo => 
+    !modulo.slug.includes('admin') && modulo.slug !== 'configuracoes'
+  );
+
+  // Módulos administrativos
+  const adminModules = sortedModules.filter(modulo => 
+    modulo.slug.includes('admin') || modulo.slug === 'configuracoes'
+  );
+
   return (
-    <nav className="bg-white border-b border-gray-200 px-6 py-4">
+    <nav className="bg-white border-b border-gray-200 px-6 py-4 relative">
       <div className="flex items-center justify-between">
-        {/* Left side - Navigation Links */}
-        <div className="flex items-center space-x-4">
+        {/* Left side - Menu Burger and Logo */}
+        <div className="flex items-center space-x-4 relative z-50">
+          {/* Menu Burger - Sempre visível */}
+          <button
+            onClick={onToggleSidebar}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            title={isSidebarOpen ? "Ocultar Sidebar" : "Mostrar Sidebar"}
+          >
+            <svg
+              className="w-6 h-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isSidebarOpen ? (
+                // X icon quando sidebar está aberto
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                // Hamburger icon quando sidebar está fechado
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+
           {/* Logo Careflow */}
           <img src={getLogoUrl()} alt="Careflow Logo" className="h-8 w-auto" />
-          
-          {sortedModules.map((modulo: Modulo) => (
+        </div>
+
+        {/* Center - Navigation Links (Desktop only) */}
+        <div className="hidden lg:flex items-center space-x-4">
+          {nonAdminModules.map((modulo: Modulo) => (
             <Link
               key={modulo.id}
               to={`/${modulo.slug}`}
@@ -77,33 +126,82 @@ const Navigation: React.FC<NavigationProps> = () => {
               <span className="font-medium">{modulo.nome}</span>
             </Link>
           ))}
+
+          {/* Administração Dropdown */}
+          {adminModules.length > 0 && (
+            <Menu as="div" className="relative">
+              <Menu.Button className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-medium">Administração</span>
+                <ChevronDown className="w-4 h-4" />
+              </Menu.Button>
+
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 focus:outline-none">
+                  <div className="py-2">
+                    {adminModules.map((modulo: Modulo) => (
+                      <Menu.Item key={modulo.id}>
+                        {({ active }) => (
+                          <Link
+                            to={`/${modulo.slug}`}
+                            className={`flex items-center space-x-3 px-4 py-3 text-sm transition-all duration-200 ${
+                              location.pathname === `/${modulo.slug}`
+                                ? 'bg-purple-100 text-purple-700'
+                                : active
+                                ? 'bg-gray-50 text-gray-900'
+                                : 'text-gray-700'
+                            }`}
+                          >
+                            {getModuleIcon(modulo.icone)}
+                            <span>{modulo.nome}</span>
+                          </Link>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          )}
         </div>
 
-        {/* Right side - User Info and Logout */}
+        {/* Right side - User Info, Logout and Mobile Menu */}
         <div className="flex items-center space-x-4">
-          {/* Nome do Usuário */}
-          <div className="hidden sm:block">
+          {/* Nome do Usuário - Desktop only */}
+          <div className="hidden lg:block">
             <div className="text-sm text-gray-700">
               <span className="font-medium">{user?.full_name}</span>
               <span className="text-gray-500 ml-2">({user?.role})</span>
             </div>
           </div>
 
-          {/* Botão de Logout */}
+          {/* Botão de Logout - Visível apenas em telas médias e grandes */}
           <button
             onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            className="hidden sm:flex bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 items-center space-x-2"
           >
-            Sair
+            <LogOut className="w-4 h-4" />
+            <span>Sair</span>
           </button>
 
           {/* Menu Mobile */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-gray-900"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 hover:shadow-md"
+              title="Menu"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
@@ -113,23 +211,94 @@ const Navigation: React.FC<NavigationProps> = () => {
 
       {/* Menu Mobile */}
       {isMenuOpen && (
-        <div className="md:hidden mt-4 pt-4 border-t border-gray-200">
-          <div className="space-y-2">
-            {sortedModules.map((modulo: Modulo) => (
+        <div 
+          className="lg:hidden absolute top-full bg-white border-l border-gray-200 shadow-2xl z-40 rounded-bl-lg" 
+          style={{ 
+            right: 0,
+            width: isSidebarOpen ? 'calc(100vw - 320px)' : '288px',
+            maxWidth: isSidebarOpen ? 'calc(100vw - 320px)' : '288px',
+            minWidth: '200px'
+          }}
+        >
+          {/* User Info Mobile */}
+          <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-medium">
+                  {user?.full_name?.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div className="text-sm">
+                <div className="font-medium text-gray-900">{user?.full_name}</div>
+                <div className="text-gray-500 text-xs">{user?.role}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Links Mobile */}
+          <div className="px-4 py-3 space-y-1">
+            {nonAdminModules.map((modulo: Modulo) => (
               <Link
                 key={modulo.id}
                 to={`/${modulo.slug}`}
-                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${
+                className={`block px-4 py-2.5 rounded-xl text-sm font-medium flex items-center space-x-3 transition-all duration-200 hover:shadow-md ${
                   location.pathname === `/${modulo.slug}`
-                    ? 'bg-purple-100 text-purple-700'
+                    ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border border-purple-200'
                     : 'text-gray-700 hover:text-purple-600 hover:bg-gray-50'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                {getModuleIcon(modulo.icone)}
+                <div className={`p-1.5 rounded-lg ${
+                  location.pathname === `/${modulo.slug}`
+                    ? 'bg-purple-200'
+                    : 'bg-gray-100'
+                }`}>
+                  {getModuleIcon(modulo.icone)}
+                </div>
                 <span>{modulo.nome}</span>
               </Link>
             ))}
+
+            {/* Administração Section */}
+            {adminModules.length > 0 && (
+              <div className="pt-2">
+                <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Administração
+                </div>
+                {adminModules.map((modulo: Modulo) => (
+                  <Link
+                    key={modulo.id}
+                    to={`/${modulo.slug}`}
+                    className={`block px-4 py-2.5 rounded-xl text-sm font-medium flex items-center space-x-3 transition-all duration-200 hover:shadow-md ${
+                      location.pathname === `/${modulo.slug}`
+                        ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border border-purple-200'
+                        : 'text-gray-700 hover:text-purple-600 hover:bg-gray-50'
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <div className={`p-1.5 rounded-lg ${
+                      location.pathname === `/${modulo.slug}`
+                        ? 'bg-purple-200'
+                        : 'bg-gray-100'
+                    }`}>
+                      {getModuleIcon(modulo.icone)}
+                    </div>
+                    <span>{modulo.nome}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Logout Button - Mobile only */}
+          <div className="px-4 py-3 border-t border-gray-100">
+            <button
+              onClick={handleLogout}
+              className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Sair</span>
+            </button>
           </div>
         </div>
       )}

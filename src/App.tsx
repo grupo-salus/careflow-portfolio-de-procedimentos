@@ -25,7 +25,10 @@ const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navigation />
+      <Navigation 
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        isSidebarOpen={isSidebarOpen}
+      />
       <div className="flex flex-1 relative overflow-hidden" style={{ height: "calc(100vh - 72px)" }}>
         {React.cloneElement(children as React.ReactElement, { 
           isSidebarOpen,
