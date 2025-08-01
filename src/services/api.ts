@@ -47,6 +47,29 @@ class ApiService {
     return response.json();
   }
 
+  async updateProfile(userData: {
+    email?: string;
+    full_name?: string;
+    password?: string;
+  }): Promise<User> {
+    const response = await fetch(`${API_BASE_URL}/auth/me`, {
+      method: 'PUT',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      try {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Erro ao atualizar perfil');
+      } catch (parseError) {
+        throw new Error('Erro ao atualizar perfil');
+      }
+    }
+
+    return response.json();
+  }
+
   async logout(): Promise<void> {
     try {
       await fetch(`${API_BASE_URL}/auth/logout`, {

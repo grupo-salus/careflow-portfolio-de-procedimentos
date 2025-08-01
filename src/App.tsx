@@ -8,13 +8,14 @@ import Portfolio from './pages/Portfolio';
 import Calculator from './pages/Calculator';
 import AdminPanel from './pages/AdminPanel';
 import AccessDenied from './pages/AccessDenied';
+import UserProfile from './pages/UserProfile';
 
 // Layout principal com navegação
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navigation />
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {children}
       </main>
     </div>
@@ -138,6 +139,18 @@ const AppRoutes: React.FC = () => {
           </MainLayout>
         </ProtectedRoute>
       } />
+      
+                                                       {/* Rota para perfil do usuário */}
+         <Route path="/profile" element={
+           <div className="min-h-screen bg-gray-50 flex flex-col">
+             <Navigation />
+             <div className="flex flex-1 relative h-full">
+               <main className="flex-1 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
+                 <UserProfile />
+               </main>
+             </div>
+           </div>
+         } />
       
       {/* Rota para acesso negado */}
       <Route path="/access-denied" element={<AccessDenied />} />

@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Modulo } from '../types/auth';
 import { getLogoUrl } from '../utils/imageUtils';
-import { LogOut, ChevronDown } from 'lucide-react';
+import { LogOut, ChevronDown, User, Settings } from 'lucide-react';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
@@ -179,22 +179,70 @@ const Navigation: React.FC<NavigationProps> = ({ onToggleSidebar, isSidebarOpen 
 
         {/* Right side - User Info, Logout and Mobile Menu */}
         <div className="flex items-center space-x-4">
-          {/* Nome do Usuário - Desktop only */}
+          {/* User Dropdown - Desktop only */}
           <div className="hidden lg:block">
-            <div className="text-sm text-gray-700">
-              <span className="font-medium">{user?.full_name}</span>
-              <span className="text-gray-500 ml-2">({user?.role})</span>
-            </div>
+            <Menu as="div" className="relative">
+              <Menu.Button className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-medium">
+                    {user?.full_name?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-medium text-gray-900">{user?.full_name}</div>
+                  <div className="text-xs text-gray-500">{user?.role}</div>
+                </div>
+                <ChevronDown className="w-4 h-4" />
+              </Menu.Button>
+
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute top-full right-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 focus:outline-none">
+                  <div className="py-2">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/profile"
+                          className={`flex items-center space-x-3 px-4 py-3 text-sm transition-all duration-200 ${
+                            active
+                              ? 'bg-gray-50 text-gray-900'
+                              : 'text-gray-700'
+                          }`}
+                        >
+                          <User className="w-4 h-4" />
+                          <span>Meu Perfil</span>
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={handleLogout}
+                          className={`w-full flex items-center space-x-3 px-4 py-3 text-sm transition-all duration-200 ${
+                            active
+                              ? 'bg-gray-50 text-gray-900'
+                              : 'text-gray-700'
+                          }`}
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Sair</span>
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
           </div>
 
-          {/* Botão de Logout - Visível apenas em telas médias e grandes */}
-          <button
-            onClick={handleLogout}
-            className="hidden sm:flex bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 items-center space-x-2"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sair</span>
-          </button>
+
 
           {/* Menu Mobile */}
           <div className="lg:hidden">
@@ -234,6 +282,16 @@ const Navigation: React.FC<NavigationProps> = ({ onToggleSidebar, isSidebarOpen 
                 <div className="font-medium text-gray-900">{user?.full_name}</div>
                 <div className="text-gray-500 text-xs">{user?.role}</div>
               </div>
+            </div>
+            <div className="mt-3">
+              <Link
+                to="/profile"
+                className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <User className="w-4 h-4" />
+                <span>Meu Perfil</span>
+              </Link>
             </div>
           </div>
 
@@ -292,16 +350,7 @@ const Navigation: React.FC<NavigationProps> = ({ onToggleSidebar, isSidebarOpen 
             )}
           </div>
 
-          {/* Logout Button - Mobile only */}
-          <div className="px-4 py-3 border-t border-gray-100">
-            <button
-              onClick={handleLogout}
-              className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
-            >
-              <LogOut className="w-4 h-4" />
-              <span>Sair</span>
-            </button>
-          </div>
+
         </div>
       )}
     </nav>
