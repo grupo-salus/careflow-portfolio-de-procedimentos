@@ -1,16 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { User, LoginCredentials, AuthContextType } from '../types/auth';
 import { apiService } from '../services/api';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
-  }
-  return context;
-};
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -23,15 +15,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const isAuthenticated = !!user;
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
-    try {
-      // Não alterar o isLoading global durante o login
-      const response = await apiService.login(credentials);
-      setUser(response.user);
-      return true;
-    } catch (error) {
-      // Não fazer console.error aqui, deixar o componente Login tratar o erro
-      throw error;
-    }
+    // Não alterar o isLoading global durante o login
+    const response = await apiService.login(credentials);
+    setUser(response.user);
+    return true;
   };
 
   const logout = async () => {

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+
 import { apiService } from '../services/api';
 import { User } from '../types/auth';
-import { User as UserIcon, Lock, Eye, EyeOff, Copy, Check, Briefcase, Grid3x3 } from 'lucide-react';
+import { User as UserIcon, Lock, Eye, EyeOff, Copy, Briefcase, Grid3x3 } from 'lucide-react';
 import Toast from '../components/Toast';
 
 const UserProfile: React.FC = () => {
@@ -29,7 +29,7 @@ const UserProfile: React.FC = () => {
       // Buscar dados do usuário atual da API
       const userData = await apiService.getCurrentUser(); 
       setUser(userData);
-    } catch (err) {
+    } catch {
       setError('Erro ao carregar dados do perfil');
     } finally {
       setLoading(false);

@@ -246,9 +246,9 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
       
       await fetchData();
       setToast({ message: successMessage, type: 'success' });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar usuário:', error);
-      const errorMessage = error.message || 'Erro ao salvar usuário';
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao salvar usuário';
       setToast({ message: errorMessage, type: 'error' });
     }
   };
@@ -267,9 +267,9 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
           await apiService.deleteUser(userId);
           setUsers(users.filter(u => u.id !== userId));
           setToast({ message: 'Usuário excluído com sucesso!', type: 'success' });
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error('Erro ao deletar usuário:', error);
-          const errorMessage = error.message || 'Erro ao deletar usuário';
+          const errorMessage = error instanceof Error ? error.message : 'Erro ao deletar usuário';
           setToast({ message: errorMessage, type: 'error' });
         }
       }
@@ -292,9 +292,9 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
             u.id === userId ? { ...u, role: 'admin' as const } : u
           ));
           setToast({ message: 'Usuário promovido a administrador com sucesso!', type: 'success' });
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error('Erro ao promover usuário:', error);
-          const errorMessage = error.message || 'Erro ao promover usuário';
+          const errorMessage = error instanceof Error ? error.message : 'Erro ao promover usuário';
           setToast({ message: errorMessage, type: 'error' });
         }
       }
@@ -317,9 +317,9 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
             u.id === userId ? { ...u, role: 'comum' as const } : u
           ));
           setToast({ message: 'Usuário rebaixado a comum com sucesso!', type: 'success' });
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error('Erro ao rebaixar usuário:', error);
-          const errorMessage = error.message || 'Erro ao rebaixar usuário';
+          const errorMessage = error instanceof Error ? error.message : 'Erro ao rebaixar usuário';
           setToast({ message: errorMessage, type: 'error' });
         }
       }
@@ -338,9 +338,9 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
       const result = await apiService.resetUserPassword(resetPasswordUser.id);
       setNewPassword(result.new_password);
       setToast({ message: 'Senha resetada com sucesso!', type: 'success' });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao resetar senha:', error);
-      const errorMessage = error.message || 'Erro ao resetar senha';
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao resetar senha';
       setToast({ message: errorMessage, type: 'error' });
     }
   };
@@ -399,7 +399,7 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
             <div>
               <select
                 value={filterRole}
-                onChange={(e) => setFilterRole(e.target.value as any)}
+                onChange={(e) => setFilterRole(e.target.value as 'admin' | 'comum' | 'all')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="all">Todos os Roles</option>

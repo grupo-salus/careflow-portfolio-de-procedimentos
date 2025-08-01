@@ -8,7 +8,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { FilterState } from "../types/procedure";
-import LabelIcon from "./LabelIcon";
+
 
 interface SidebarFiltersProps {
   filters: FilterState;
@@ -17,7 +17,7 @@ interface SidebarFiltersProps {
   priceRange: [number, number];
   timeRange: [number, number];
   isOpen: boolean;
-  onToggle: () => void;
+
 }
 
 const SidebarFilters: React.FC<SidebarFiltersProps> = ({
@@ -27,7 +27,7 @@ const SidebarFilters: React.FC<SidebarFiltersProps> = ({
   priceRange,
   timeRange,
   isOpen,
-  onToggle,
+
 }) => {
   const clearFilters = () => {
     onFiltersChange({

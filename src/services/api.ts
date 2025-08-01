@@ -24,7 +24,7 @@ class ApiService {
       try {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Credenciais inválidas');
-      } catch (parseError) {
+      } catch {
         // Se não conseguir fazer parse do JSON, usar mensagem padrão
         throw new Error('Credenciais inválidas. Verifique seu email e senha.');
       }
@@ -62,7 +62,7 @@ class ApiService {
       try {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Erro ao atualizar perfil');
-      } catch (parseError) {
+      } catch {
         throw new Error('Erro ao atualizar perfil');
       }
     }
@@ -76,8 +76,8 @@ class ApiService {
         method: 'POST',
         headers: this.getAuthHeaders(),
       });
-    } catch (error) {
-      console.error('Erro no logout:', error);
+    } catch {
+      // Ignorar erros no logout
     } finally {
       localStorage.removeItem('access_token');
     }
@@ -91,7 +91,7 @@ class ApiService {
     try {
       await this.getCurrentUser();
       return true;
-    } catch (error) {
+    } catch {
       localStorage.removeItem('access_token');
       return false;
     }
@@ -138,7 +138,7 @@ class ApiService {
       try {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Erro ao criar usuário');
-      } catch (parseError) {
+      } catch {
         throw new Error('Erro ao criar usuário');
       }
     }
@@ -170,7 +170,7 @@ class ApiService {
       try {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Erro ao deletar usuário');
-      } catch (parseError) {
+      } catch {
         throw new Error('Erro ao deletar usuário');
       }
     }
@@ -186,7 +186,7 @@ class ApiService {
       try {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Erro ao resetar senha');
-      } catch (parseError) {
+      } catch {
         throw new Error('Erro ao resetar senha');
       }
     }
@@ -204,7 +204,7 @@ class ApiService {
       try {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Erro ao promover usuário');
-      } catch (parseError) {
+      } catch {
         throw new Error('Erro ao promover usuário');
       }
     }
@@ -220,7 +220,7 @@ class ApiService {
       try {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Erro ao rebaixar usuário');
-      } catch (parseError) {
+      } catch {
         throw new Error('Erro ao rebaixar usuário');
       }
     }

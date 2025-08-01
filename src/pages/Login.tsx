@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { getLogoUrl } from '../utils/imageUtils';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import Alert from '../components/Alert';
@@ -40,14 +40,14 @@ const Login: React.FC = () => {
         // Redirecionar para o primeiro módulo disponível ou dashboard
         navigate('/portfolio');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Capturar mensagens de erro mais específicas
       let errorMessage = 'Credenciais inválidas. Verifique seu email e senha.';
       
-      if (err.message) {
+      if (err instanceof Error) {
         errorMessage = err.message;
-      } else if (err.detail) {
-        errorMessage = err.detail;
+      } else if (typeof err === 'object' && err !== null && 'detail' in err) {
+        errorMessage = (err as { detail: string }).detail;
       }
       
       // Melhorar mensagens específicas

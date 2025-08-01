@@ -26,7 +26,7 @@ const SimulationParameters: React.FC<SimulationParametersProps> = ({
         typeof updater === "function" ? updater(simulationParams) : updater;
       onParamsChange(newParams);
     },
-    [onParamsChange]
+    [onParamsChange, simulationParams]
   );
 
   // Preencher automaticamente os parâmetros quando um procedimento é selecionado

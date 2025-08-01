@@ -8,7 +8,7 @@ interface SidebarCalculatorProps {
   selectedProcedure: Procedure | null;
   onProcedureSelect: (procedure: Procedure | null) => void;
   isOpen: boolean;
-  onToggle: () => void;
+
 }
 
 type CategoryFilter = "todos" | "financeiro" | "comercial";
@@ -18,7 +18,7 @@ const SidebarCalculator: React.FC<SidebarCalculatorProps> = ({
   selectedProcedure,
   onProcedureSelect,
   isOpen,
-  onToggle,
+
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("todos");

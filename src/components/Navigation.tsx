@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { Modulo } from '../types/auth';
 import { getLogoUrl } from '../utils/imageUtils';
-import { LogOut, ChevronDown, User, Settings } from 'lucide-react';
+import { LogOut, ChevronDown, User } from 'lucide-react';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
