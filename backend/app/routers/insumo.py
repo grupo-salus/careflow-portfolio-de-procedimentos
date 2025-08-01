@@ -16,7 +16,7 @@ from ..models.procedimento import Procedimento
 from ..models.associations import ProcedimentoInsumo
 from ..models.user import User
 
-router = APIRouter(prefix="/insumos", tags=["insumos"])
+router = APIRouter(tags=["insumos"])
 
 
 @router.get("/", response_model=List[InsumoResponse])

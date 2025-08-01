@@ -11,7 +11,7 @@ from ..schemas.empresa import EmpresaCreate, EmpresaUpdate, EmpresaResponse, Emp
 from ..services.empresa_service import EmpresaService
 from ..models.user import User
 
-router = APIRouter(prefix="/empresas", tags=["empresas"])
+router = APIRouter(tags=["empresas"])
 
 
 @router.get("/", response_model=List[EmpresaResponse])

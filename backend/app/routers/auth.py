@@ -12,7 +12,7 @@ from ..services.permission_service import PermissionService
 from ..core.dependencies import get_current_active_user
 from ..models.user import User
 
-router = APIRouter(prefix="/auth", tags=["autenticação"])
+router = APIRouter(tags=["autenticação"])
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)

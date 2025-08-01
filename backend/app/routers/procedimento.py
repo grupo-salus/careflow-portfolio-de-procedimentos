@@ -14,7 +14,7 @@ from ..schemas.procedimento import (
 from ..models.procedimento import Procedimento, ProcedimentoCategoria
 from ..models.user import User
 
-router = APIRouter(prefix="/procedimentos", tags=["procedimentos"])
+router = APIRouter(tags=["procedimentos"])
 
 
 @router.get("/", response_model=List[ProcedimentoWithEmpresa])

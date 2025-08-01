@@ -11,7 +11,7 @@ from ..schemas.modulo import ModuloCreate, ModuloUpdate, ModuloResponse, ModuloW
 from ..services.modulo_service import ModuloService
 from ..models.user import User
 
-router = APIRouter(prefix="/modulos", tags=["módulos"])
+router = APIRouter(tags=["módulos"])
 
 
 @router.get("/", response_model=List[ModuloResponse])

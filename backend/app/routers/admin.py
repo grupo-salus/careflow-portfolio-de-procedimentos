@@ -19,7 +19,7 @@ from ..services.modulo_service import ModuloService
 from ..services.permission_service import PermissionService
 from ..models.user import User
 
-router = APIRouter(prefix="/admin", tags=["administração"])
+router = APIRouter(tags=["administração"])
 
 
 @router.get("/users", response_model=List[UserResponse])
