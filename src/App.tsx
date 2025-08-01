@@ -105,9 +105,12 @@ const AppRoutes: React.FC = () => {
       {/* Rotas para módulos administrativos (futuras implementações) */}
       <Route path="/admin_usuarios" element={
         <ProtectedRoute requiredModule="admin_usuarios">
-          <MainLayout>
-            <AdminPanel />
-          </MainLayout>
+          <div className="min-h-screen bg-gray-50 flex flex-col">
+            <Navigation />
+            <div className="flex flex-1 relative h-full">
+              <AdminPanel />
+            </div>
+          </div>
         </ProtectedRoute>
       } />
       
@@ -141,17 +144,15 @@ const AppRoutes: React.FC = () => {
         </ProtectedRoute>
       } />
       
-                                                       {/* Rota para perfil do usuário */}
-         <Route path="/profile" element={
-           <div className="min-h-screen bg-gray-50 flex flex-col">
-             <Navigation />
-             <div className="flex flex-1 relative h-full">
-               <main className="flex-1 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
-                 <UserProfile />
-               </main>
-             </div>
-           </div>
-         } />
+      {/* Rota para perfil do usuário */}
+      <Route path="/profile" element={
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+          <Navigation />
+          <div className="flex flex-1 relative h-full">
+            <UserProfile />
+          </div>
+        </div>
+      } />
       
       {/* Rota para acesso negado */}
       <Route path="/access-denied" element={<AccessDenied />} />

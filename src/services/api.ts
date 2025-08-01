@@ -138,8 +138,13 @@ class ApiService {
       try {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Erro ao criar usuário');
-      } catch {
-        throw new Error('Erro ao criar usuário');
+      } catch (parseError) {
+        // Se não conseguir fazer parse do JSON, verificar se é erro de parsing ou de rede
+        if (parseError instanceof SyntaxError) {
+          throw new Error('Erro ao criar usuário');
+        }
+        // Se for outro tipo de erro, re-lançar
+        throw parseError;
       }
     }
 
@@ -154,7 +159,17 @@ class ApiService {
     });
 
     if (!response.ok) {
-      throw new Error('Erro ao atualizar usuário');
+      try {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Erro ao atualizar usuário');
+      } catch (parseError) {
+        // Se não conseguir fazer parse do JSON, verificar se é erro de parsing ou de rede
+        if (parseError instanceof SyntaxError) {
+          throw new Error('Erro ao atualizar usuário');
+        }
+        // Se for outro tipo de erro, re-lançar
+        throw parseError;
+      }
     }
 
     return response.json();
@@ -308,4 +323,4 @@ class ApiService {
   }
 }
 
-export const apiService = new ApiService(); 
+export const apiService = new ApiService();

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import { apiService } from '../services/api';
 import { User } from '../types/auth';
 import { User as UserIcon, Lock, Eye, EyeOff, Copy, Briefcase, Grid3x3 } from 'lucide-react';
@@ -26,7 +25,6 @@ const UserProfile: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      // Buscar dados do usuário atual da API
       const userData = await apiService.getCurrentUser(); 
       setUser(userData);
     } catch {
@@ -137,7 +135,7 @@ const UserProfile: React.FC = () => {
       >
         {showToast && <Toast message={toastMessage} type={toastType} onClose={() => setShowToast(false)} />}
 
-        {/* Header Padronizado */}
+        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 min-w-8 min-h-8 bg-gradient-to-r from-[var(--careflow-primary)] to-[var(--careflow-secondary)] rounded-full flex items-center justify-center flex-shrink-0">
@@ -149,114 +147,124 @@ const UserProfile: React.FC = () => {
           </div>
         </div>
 
-        {/* Grid Padronizado */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8">
-          
-          {/* Card 1: Informações Pessoais */}
-          <div className="bg-white rounded-xl shadow-sm p-6 space-y-4">
-            <h2 className="text-lg font-semibold text-gray-800">Informações Pessoais</h2>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Nome Completo</label>
-              <p className="bg-gray-50 px-3 py-2 rounded-lg text-sm text-gray-800">{user.full_name}</p>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
-              <div className="bg-gray-50 px-3 py-2 rounded-lg text-sm text-gray-800 flex items-center justify-between">
-                <span>{user.email}</span>
-                <button onClick={() => copyToClipboard(user.email)} className="text-gray-400 hover:text-[var(--careflow-primary)]" title="Copiar">
-                  <Copy className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Função</label>
-              <p><span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}`}>{user.role === 'admin' ? 'Administrador' : 'Usuário Comum'}</span></p>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
-              <p><span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Ativo</span></p>
-            </div>
-          </div>
-
-          {/* Card 2: Alterar Senha */}
-          <div className="bg-white rounded-xl shadow-sm p-6 space-y-4 flex flex-col">
-            <h2 className="text-lg font-semibold text-gray-800">Segurança</h2>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Nova Senha</label>
-              <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} value={newPassword} onChange={(e) => handlePasswordChange(e.target.value)} className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--careflow-primary)]" placeholder="••••••••"/>
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
-            {newPassword && (
+        {/* Grid responsivo */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Coluna 1: Informações Pessoais */}
+          <div className="md:col-span-1">
+            <div className="bg-white rounded-xl shadow-sm p-6 space-y-4">
+              <h2 className="text-lg font-semibold text-gray-800">Informações Pessoais</h2>
               <div>
-                <div className="flex space-x-1.5 mb-1">
-                  {[1, 2, 3, 4].map((level) => (<div key={level} className={`h-1.5 flex-1 rounded-full ${passwordStrength >= level ? getPasswordStrengthText().bgColor : 'bg-gray-200'}`} />))}
-                </div>
-                <p className={`text-xs font-medium ${getPasswordStrengthText().color}`}>Força: {getPasswordStrengthText().text}</p>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Nome Completo</label>
+                <p className="bg-gray-50 px-3 py-2 rounded-lg text-sm text-gray-800">{user.full_name}</p>
               </div>
-            )}
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Confirmar Nova Senha</label>
-              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--careflow-primary)]" placeholder="••••••••"/>
-            </div>
-            <div className="flex-grow"></div>
-            <button onClick={handleChangePassword} disabled={isChangingPassword || !newPassword || !confirmPassword || passwordStrength < 4} className="w-full bg-gradient-to-r from-[var(--careflow-primary)] to-[var(--careflow-secondary)] disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white py-2.5 px-4 rounded-lg text-sm font-semibold transition-all flex items-center justify-center space-x-2">
-              {isChangingPassword ? (
-                <>
-                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                  <span>Alterando...</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-4 h-4" />
-                  <span>Alterar Senha</span>
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Card 3: Acessos e Associações */}
-          <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800">Acessos e Associações</h2>
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center"><Grid3x3 className="w-4 h-4 mr-2 text-gray-400"/>Módulos Acessíveis</h3>
-              {user.modulos && user.modulos.length > 0 ? (
-                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
-                  {user.modulos.map((modulo) => (
-                    <div key={modulo.id} className="flex items-center p-2.5 bg-gray-50 rounded-lg text-sm">
-                      <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
-                        <span className="text-purple-700 text-xs font-bold">{modulo.nome.charAt(0).toUpperCase()}</span>
-                      </div>
-                      <span className="text-gray-800 font-medium">{modulo.nome}</span>
-                    </div>
-                  ))}
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
+                <div className="bg-gray-50 px-3 py-2 rounded-lg text-sm text-gray-800 flex items-center justify-between">
+                  <span>{user.email}</span>
+                  <button onClick={() => copyToClipboard(user.email)} className="text-gray-400 hover:text-[var(--careflow-primary)]" title="Copiar">
+                    <Copy className="w-4 h-4" />
+                  </button>
                 </div>
-              ) : (
-                <p className="text-sm text-gray-500 p-3 bg-gray-50 rounded-lg">Nenhum módulo associado.</p>
-              )}
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center"><Briefcase className="w-4 h-4 mr-2 text-gray-400"/>Empresas Associadas</h3>
-              {user.empresas && user.empresas.length > 0 ? (
-                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
-                  {user.empresas.map((empresa) => (
-                    <div key={empresa.id} className="flex items-center p-2.5 bg-gray-50 rounded-lg text-sm">
-                       <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                        <span className="text-blue-700 text-xs font-bold">{empresa.nome.charAt(0).toUpperCase()}</span>
-                      </div>
-                      <span className="text-gray-800 font-medium">{empresa.nome}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-gray-500 p-3 bg-gray-50 rounded-lg">Nenhuma empresa associada.</p>
-              )}
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Função</label>
+                <p><span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}`}>{user.role === 'admin' ? 'Administrador' : 'Usuário Comum'}</span></p>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
+                <p><span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Ativo</span></p>
+              </div>
             </div>
           </div>
 
+          {/* Coluna 2: Segurança */}
+          <div className="md:col-span-1">
+            <div className="bg-white rounded-xl shadow-sm p-6 space-y-4 flex flex-col h-full">
+              <h2 className="text-lg font-semibold text-gray-800">Segurança</h2>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Nova Senha</label>
+                <div className="relative">
+                  <input type={showPassword ? 'text' : 'password'} value={newPassword} onChange={(e) => handlePasswordChange(e.target.value)} className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--careflow-primary)]" placeholder="••••••••"/>
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
+              </div>
+              {newPassword && (
+                <div>
+                  <div className="flex space-x-1.5 mb-1">
+                    {[1, 2, 3, 4].map((level) => (<div key={level} className={`h-1.5 flex-1 rounded-full ${passwordStrength >= level ? getPasswordStrengthText().bgColor : 'bg-gray-200'}`} />))}
+                  </div>
+                  <p className={`text-xs font-medium ${getPasswordStrengthText().color}`}>Força: {getPasswordStrengthText().text}</p>
+                </div>
+              )}
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Confirmar Nova Senha</label>
+                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--careflow-primary)]" placeholder="••••••••"/>
+              </div>
+              <div className="flex-grow"></div>
+              <button onClick={handleChangePassword} disabled={isChangingPassword || !newPassword || !confirmPassword || passwordStrength < 4} className="w-full bg-gradient-to-r from-[var(--careflow-primary)] to-[var(--careflow-secondary)] disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white py-2.5 px-4 rounded-lg text-sm font-semibold transition-all flex items-center justify-center space-x-2">
+                {isChangingPassword ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span>Alterando...</span>
+                  </>
+                ) : (
+                  <>
+                    <Lock className="w-4 h-4" />
+                    <span>Alterar Senha</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Coluna 3: Acessos e Associações */}
+          <div className="md:col-span-2 lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
+              <h2 className="text-lg font-semibold text-gray-800">Acessos e Associações</h2>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                  <Grid3x3 className="w-4 h-4 mr-2 text-gray-400"/>
+                  Módulos Acessíveis
+                </h3>
+                {user.modulos && user.modulos.length > 0 ? (
+                  <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
+                    {user.modulos.map((modulo) => (
+                      <div key={modulo.id} className="flex items-center p-2.5 bg-gray-50 rounded-lg text-sm">
+                        <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                          <span className="text-purple-700 text-xs font-bold">{modulo.nome.charAt(0).toUpperCase()}</span>
+                        </div>
+                        <span className="text-gray-800 font-medium">{modulo.nome}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 p-3 bg-gray-50 rounded-lg">Nenhum módulo associado.</p>
+                )}
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                  <Briefcase className="w-4 h-4 mr-2 text-gray-400"/>
+                  Empresas Associadas
+                </h3>
+                {user.empresas && user.empresas.length > 0 ? (
+                  <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
+                    {user.empresas.map((empresa) => (
+                      <div key={empresa.id} className="flex items-center p-2.5 bg-gray-50 rounded-lg text-sm">
+                        <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                          <span className="text-blue-700 text-xs font-bold">{empresa.nome.charAt(0).toUpperCase()}</span>
+                        </div>
+                        <span className="text-gray-800 font-medium">{empresa.nome}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 p-3 bg-gray-50 rounded-lg">Nenhuma empresa associada.</p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
