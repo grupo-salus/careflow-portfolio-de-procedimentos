@@ -26,7 +26,7 @@ const UserProfile: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      // Mock de dados para desenvolvimento, substitua pela chamada de API real
+      // Buscar dados do usuário atual da API
       const userData = await apiService.getCurrentUser(); 
       setUser(userData);
     } catch (err) {

@@ -9,7 +9,9 @@ import {
   Shield, 
   User as UserIcon,
   Search,
-  Key
+  Key,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import ConfirmModal from '../components/ConfirmModal';
 import Toast from '../components/Toast';
@@ -20,15 +22,24 @@ interface AdminPanelProps {
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = () => {
+  // Estados principais
   const [users, setUsers] = useState<User[]>([]);
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [modulos, setModulos] = useState<Modulo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [showUserModal, setShowUserModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<'all' | 'admin' | 'comum'>('all');
 
+  // Estados de paginação
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage] = useState(10);
+
+  // Estados para modais
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [resetPasswordUser, setResetPasswordUser] = useState<User | null>(null);
+  const [newPassword, setNewPassword] = useState('');
 
   // Estados para edição de usuário
   const [editingUser, setEditingUser] = useState<Partial<User>>({});
@@ -36,11 +47,8 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
   const [selectedModulos, setSelectedModulos] = useState<number[]>([]);
   const [password, setPassword] = useState('');
   const [passwordStrength, setPasswordStrength] = useState<'weak' | 'medium' | 'strong' | null>(null);
-  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
-  const [resetPasswordUser, setResetPasswordUser] = useState<User | null>(null);
-  const [newPassword, setNewPassword] = useState('');
 
-  // Estados para modais de confirmação
+  // Estados para modais de confirmação e toast
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
     type: 'danger' | 'warning' | 'info';
@@ -55,7 +63,6 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
     onConfirm: () => {}
   });
 
-  // Estado para toast
   const [toast, setToast] = useState<{
     message: string;
     type: 'success' | 'error' | 'warning' | 'info';
@@ -68,58 +75,40 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      
-      // Buscar dados da API
       const [usersData, empresasData, modulosData] = await Promise.all([
         apiService.getUsers(),
         apiService.getEmpresas(),
         apiService.getModulos()
       ]);
-
-
-
       setUsers(usersData);
       setEmpresas(empresasData);
       setModulos(modulosData);
-         } catch (error) {
-       console.error('Erro ao carregar dados:', error);
-       // Não usar dados mockados, mostrar erro
-       setToast({ message: 'Erro ao carregar dados. Verifique se o backend está rodando.', type: 'error' });
-     } finally {
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+      setToast({ message: 'Erro ao carregar dados. Verifique se o backend está rodando.', type: 'error' });
+    } finally {
       setLoading(false);
     }
   };
 
+  // Filtros e paginação
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === 'all' || user.role === filterRole;
-
     return matchesSearch && matchesRole;
   });
 
-  const handleEditUser = (user: User) => {
-    setSelectedUser(user);
-    setEditingUser({
-      id: user.id,
-      email: user.email,
-      full_name: user.full_name,
-      role: user.role
-    });
-    setSelectedEmpresas(user.empresas.map(e => e.id));
-    
-    // Se o usuário é comum, filtrar apenas módulos não admin-only
-    let userModulos = user.modulos.map(m => m.id);
-    if (user.role === 'comum') {
-      const adminOnlyModulos = modulos.filter(m => m.is_admin_only).map(m => m.id);
-      userModulos = userModulos.filter(id => !adminOnlyModulos.includes(id));
-    }
-    setSelectedModulos(userModulos);
-    setPassword('');
-    setPasswordStrength(null);
-    setShowUserModal(true);
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
+  // Funções de validação de senha
   const checkPasswordStrength = (password: string) => {
     if (!password) {
       setPasswordStrength(null);
@@ -138,124 +127,130 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
     else setPasswordStrength('strong');
   };
 
-     const handleSaveUser = async () => {
-     try {
-       let successMessage = 'Usuário salvo com sucesso!';
-       
-       if (selectedUser) {
-        // Atualizar usuário existente
+  // Funções de gerenciamento de usuários
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
+    setEditingUser({
+      id: user.id,
+      email: user.email,
+      full_name: user.full_name,
+      role: user.role
+    });
+    setSelectedEmpresas(user.empresas.map(e => e.id));
+    
+    let userModulos = user.modulos.map(m => m.id);
+    if (user.role === 'comum') {
+      const adminOnlyModulos = modulos.filter(m => m.is_admin_only).map(m => m.id);
+      userModulos = userModulos.filter(id => !adminOnlyModulos.includes(id));
+    }
+    setSelectedModulos(userModulos);
+    setPassword('');
+    setPasswordStrength(null);
+    setShowUserModal(true);
+  };
+
+  const handleSaveUser = async () => {
+    try {
+      let successMessage = 'Usuário salvo com sucesso!';
+      
+      if (selectedUser) {
         await apiService.updateUser(selectedUser.id, editingUser);
         
-        // Atualizar associações de empresas
         const currentEmpresaIds = selectedUser.empresas.map(e => e.id);
         const newEmpresaIds = selectedEmpresas;
         
-        // Remover empresas que não estão mais selecionadas
         for (const empresaId of currentEmpresaIds) {
           if (!newEmpresaIds.includes(empresaId)) {
             await apiService.removeUserFromEmpresa(selectedUser.id, empresaId);
           }
         }
         
-        // Adicionar novas empresas
         for (const empresaId of newEmpresaIds) {
           if (!currentEmpresaIds.includes(empresaId)) {
             await apiService.addUserToEmpresa(selectedUser.id, empresaId);
           }
         }
         
-        // Atualizar associações de módulos
         const currentModuloIds = selectedUser.modulos.map(m => m.id);
         const newModuloIds = selectedModulos;
         
-        // Remover módulos que não estão mais selecionados
         for (const moduloId of currentModuloIds) {
           if (!newModuloIds.includes(moduloId)) {
             await apiService.removeUserFromModulo(selectedUser.id, moduloId);
           }
         }
         
-        // Adicionar novos módulos
         for (const moduloId of newModuloIds) {
           if (!currentModuloIds.includes(moduloId)) {
             await apiService.addUserToModulo(selectedUser.id, moduloId);
           }
         }
-             } else {
-         // Criar novo usuário
-         if (!editingUser.email || !editingUser.full_name || !password) {
-           setToast({ message: 'Todos os campos são obrigatórios para criar um usuário.', type: 'error' });
-           return;
-         }
+      } else {
+        if (!editingUser.email || !editingUser.full_name || !password) {
+          setToast({ message: 'Todos os campos são obrigatórios para criar um usuário.', type: 'error' });
+          return;
+        }
 
-         // Validar senha no frontend
-         if (password.length < 8) {
-           setToast({ message: 'A senha deve ter pelo menos 8 caracteres.', type: 'error' });
-           return;
-         }
-         if (!/[A-Z]/.test(password)) {
-           setToast({ message: 'A senha deve conter pelo menos uma letra maiúscula.', type: 'error' });
-           return;
-         }
-         if (!/[a-z]/.test(password)) {
-           setToast({ message: 'A senha deve conter pelo menos uma letra minúscula.', type: 'error' });
-           return;
-         }
-         if (!/\d/.test(password)) {
-           setToast({ message: 'A senha deve conter pelo menos um número.', type: 'error' });
-           return;
-         }
+        if (password.length < 8) {
+          setToast({ message: 'A senha deve ter pelo menos 8 caracteres.', type: 'error' });
+          return;
+        }
+        if (!/[A-Z]/.test(password)) {
+          setToast({ message: 'A senha deve conter pelo menos uma letra maiúscula.', type: 'error' });
+          return;
+        }
+        if (!/[a-z]/.test(password)) {
+          setToast({ message: 'A senha deve conter pelo menos uma letra minúscula.', type: 'error' });
+          return;
+        }
+        if (!/\d/.test(password)) {
+          setToast({ message: 'A senha deve conter pelo menos um número.', type: 'error' });
+          return;
+        }
 
-                 const newUser = await apiService.createUser({
-           email: editingUser.email,
-           full_name: editingUser.full_name,
-           password: password,
-           role: editingUser.role || 'comum'
-         });
+        const newUser = await apiService.createUser({
+          email: editingUser.email,
+          full_name: editingUser.full_name,
+          password: password,
+          role: editingUser.role || 'comum'
+        });
 
-         // Associar empresas selecionadas
-         for (const empresaId of selectedEmpresas) {
-           await apiService.addUserToEmpresa(newUser.id, empresaId);
-         }
+        for (const empresaId of selectedEmpresas) {
+          await apiService.addUserToEmpresa(newUser.id, empresaId);
+        }
 
-         // Associar módulos selecionados
-         for (const moduloId of selectedModulos) {
-           await apiService.addUserToModulo(newUser.id, moduloId);
-         }
+        for (const moduloId of selectedModulos) {
+          await apiService.addUserToModulo(newUser.id, moduloId);
+        }
 
-         // Adicionar o novo usuário à lista
-         setUsers([...users, newUser]);
-
-         // Mostrar mensagem de sucesso com detalhes
-         const empresaCount = selectedEmpresas.length;
-         const moduloCount = selectedModulos.length;
-         successMessage = 'Usuário criado com sucesso!';
-         
-         if (empresaCount > 0 || moduloCount > 0) {
-           const details = [];
-           if (empresaCount > 0) details.push(`${empresaCount} empresa(s)`);
-           if (moduloCount > 0) details.push(`${moduloCount} módulo(s)`);
-           successMessage += ` Associado a: ${details.join(', ')}.`;
-         }
+        setUsers([...users, newUser]);
+        const empresaCount = selectedEmpresas.length;
+        const moduloCount = selectedModulos.length;
+        successMessage = 'Usuário criado com sucesso!';
+        
+        if (empresaCount > 0 || moduloCount > 0) {
+          const details = [];
+          if (empresaCount > 0) details.push(`${empresaCount} empresa(s)`);
+          if (moduloCount > 0) details.push(`${moduloCount} módulo(s)`);
+          successMessage += ` Associado a: ${details.join(', ')}.`;
+        }
       }
       
-             // Limpar estado
-       setShowUserModal(false);
-       setSelectedUser(null);
-       setEditingUser({});
-       setSelectedEmpresas([]);
-       setSelectedModulos([]);
-       setPassword('');
-       setPasswordStrength(null);
+      setShowUserModal(false);
+      setSelectedUser(null);
+      setEditingUser({});
+      setSelectedEmpresas([]);
+      setSelectedModulos([]);
+      setPassword('');
+      setPasswordStrength(null);
       
-                     // Recarregar dados
-        await fetchData();
-        setToast({ message: successMessage, type: 'success' });
-     } catch (error: any) {
-       console.error('Erro ao salvar usuário:', error);
-       const errorMessage = error.message || 'Erro ao salvar usuário';
-       setToast({ message: errorMessage, type: 'error' });
-     }
+      await fetchData();
+      setToast({ message: successMessage, type: 'success' });
+    } catch (error: any) {
+      console.error('Erro ao salvar usuário:', error);
+      const errorMessage = error.message || 'Erro ao salvar usuário';
+      setToast({ message: errorMessage, type: 'error' });
+    }
   };
 
   const handleDeleteUser = async (userId: number) => {
@@ -268,15 +263,15 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
       title: 'Excluir Usuário',
       message: `Tem certeza que deseja excluir o usuário "${user.full_name}"? Esta ação não pode ser desfeita.`,
       onConfirm: async () => {
-                 try {
-           await apiService.deleteUser(userId);
-           setUsers(users.filter(u => u.id !== userId));
-           setToast({ message: 'Usuário excluído com sucesso!', type: 'success' });
-         } catch (error: any) {
-           console.error('Erro ao deletar usuário:', error);
-           const errorMessage = error.message || 'Erro ao deletar usuário';
-           setToast({ message: errorMessage, type: 'error' });
-         }
+        try {
+          await apiService.deleteUser(userId);
+          setUsers(users.filter(u => u.id !== userId));
+          setToast({ message: 'Usuário excluído com sucesso!', type: 'success' });
+        } catch (error: any) {
+          console.error('Erro ao deletar usuário:', error);
+          const errorMessage = error.message || 'Erro ao deletar usuário';
+          setToast({ message: errorMessage, type: 'error' });
+        }
       }
     });
   };
@@ -291,17 +286,17 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
       title: 'Promover Usuário',
       message: `Tem certeza que deseja promover "${user.full_name}" a administrador?`,
       onConfirm: async () => {
-                 try {
-           await apiService.promoteUser(userId);
-           setUsers(users.map(u => 
-             u.id === userId ? { ...u, role: 'admin' as const } : u
-           ));
-           setToast({ message: 'Usuário promovido a administrador com sucesso!', type: 'success' });
-         } catch (error: any) {
-           console.error('Erro ao promover usuário:', error);
-           const errorMessage = error.message || 'Erro ao promover usuário';
-           setToast({ message: errorMessage, type: 'error' });
-         }
+        try {
+          await apiService.promoteUser(userId);
+          setUsers(users.map(u => 
+            u.id === userId ? { ...u, role: 'admin' as const } : u
+          ));
+          setToast({ message: 'Usuário promovido a administrador com sucesso!', type: 'success' });
+        } catch (error: any) {
+          console.error('Erro ao promover usuário:', error);
+          const errorMessage = error.message || 'Erro ao promover usuário';
+          setToast({ message: errorMessage, type: 'error' });
+        }
       }
     });
   };
@@ -316,17 +311,17 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
       title: 'Rebaixar Usuário',
       message: `Tem certeza que deseja rebaixar "${user.full_name}" a usuário comum?`,
       onConfirm: async () => {
-                 try {
-           await apiService.demoteUser(userId);
-           setUsers(users.map(u => 
-             u.id === userId ? { ...u, role: 'comum' as const } : u
-           ));
-           setToast({ message: 'Usuário rebaixado a comum com sucesso!', type: 'success' });
-         } catch (error: any) {
-           console.error('Erro ao rebaixar usuário:', error);
-           const errorMessage = error.message || 'Erro ao rebaixar usuário';
-           setToast({ message: errorMessage, type: 'error' });
-         }
+        try {
+          await apiService.demoteUser(userId);
+          setUsers(users.map(u => 
+            u.id === userId ? { ...u, role: 'comum' as const } : u
+          ));
+          setToast({ message: 'Usuário rebaixado a comum com sucesso!', type: 'success' });
+        } catch (error: any) {
+          console.error('Erro ao rebaixar usuário:', error);
+          const errorMessage = error.message || 'Erro ao rebaixar usuário';
+          setToast({ message: errorMessage, type: 'error' });
+        }
       }
     });
   };
@@ -365,8 +360,12 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
   }
 
   return (
-    <div className="flex flex-1 h-full overflow-hidden">
-      <main className={`transition-all duration-300 p-6 overflow-y-auto flex-1`} style={{ height: "100%", maxHeight: "100vh" }}>
+    <>
+      <div className="flex flex-1 h-full overflow-hidden">
+        <main
+          className={`transition-all duration-300 p-6 overflow-y-auto flex-1`}
+          style={{ height: "100%", maxHeight: "100vh" }}
+        >
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3">
@@ -411,16 +410,16 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
 
             {/* Botão Adicionar */}
             <div>
-                             <button
-                 onClick={() => {
-                   setSelectedUser(null);
-                   setEditingUser({ role: 'comum' });
-                                        setSelectedEmpresas([]);
-                     setSelectedModulos([]);
-                     setPassword('');
-                     setPasswordStrength(null);
-                     setShowUserModal(true);
-                 }}
+              <button
+                onClick={() => {
+                  setSelectedUser(null);
+                  setEditingUser({ role: 'comum' });
+                  setSelectedEmpresas([]);
+                  setSelectedModulos([]);
+                  setPassword('');
+                  setPasswordStrength(null);
+                  setShowUserModal(true);
+                }}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors"
               >
                 <Plus className="w-4 h-4" />
@@ -454,7 +453,7 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredUsers.map((user) => (
+                {currentUsers.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -547,6 +546,72 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Paginação */}
+          {totalPages > 1 && (
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+              <div className="flex-1 flex justify-between sm:hidden">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Anterior
+                </button>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Próxima
+                </button>
+              </div>
+              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm text-gray-700">
+                    Mostrando <span className="font-medium">{indexOfFirstUser + 1}</span> a{' '}
+                    <span className="font-medium">
+                      {Math.min(indexOfLastUser, filteredUsers.length)}
+                    </span>{' '}
+                    de <span className="font-medium">{filteredUsers.length}</span> resultados
+                  </p>
+                </div>
+                <div>
+                  <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                          page === currentPage
+                            ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                            : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Modal de Edição/Criação de Usuário */}
@@ -587,81 +652,80 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
                       />
                     </div>
 
-                                         <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                         Email
-                       </label>
-                       <input
-                         type="email"
-                         value={editingUser.email || ''}
-                         onChange={(e) => setEditingUser({...editingUser, email: e.target.value})}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={editingUser.email || ''}
+                        onChange={(e) => setEditingUser({...editingUser, email: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
 
-                                           {!selectedUser && (
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Senha
-                          </label>
-                          <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => {
-                              setPassword(e.target.value);
-                              checkPasswordStrength(e.target.value);
-                            }}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Digite a senha do usuário"
-                          />
-                          {password && (
-                            <div className="mt-1">
-                              <div className="flex items-center space-x-2">
-                                <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                  <div 
-                                    className={`h-2 rounded-full transition-all duration-300 ${
-                                      passwordStrength === 'weak' ? 'bg-red-500 w-1/3' :
-                                      passwordStrength === 'medium' ? 'bg-yellow-500 w-2/3' :
-                                      passwordStrength === 'strong' ? 'bg-green-500 w-full' : ''
-                                    }`}
-                                  />
-                                </div>
-                                <span className={`text-xs font-medium ${
-                                  passwordStrength === 'weak' ? 'text-red-600' :
-                                  passwordStrength === 'medium' ? 'text-yellow-600' :
-                                  passwordStrength === 'strong' ? 'text-green-600' : 'text-gray-500'
-                                }`}>
-                                  {passwordStrength === 'weak' ? 'Fraca' :
-                                   passwordStrength === 'medium' ? 'Média' :
-                                   passwordStrength === 'strong' ? 'Forte' : ''}
-                                </span>
+                    {!selectedUser && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Senha
+                        </label>
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            checkPasswordStrength(e.target.value);
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Digite a senha do usuário"
+                        />
+                        {password && (
+                          <div className="mt-1">
+                            <div className="flex items-center space-x-2">
+                              <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className={`h-2 rounded-full transition-all duration-300 ${
+                                    passwordStrength === 'weak' ? 'bg-red-500 w-1/3' :
+                                    passwordStrength === 'medium' ? 'bg-yellow-500 w-2/3' :
+                                    passwordStrength === 'strong' ? 'bg-green-500 w-full' : ''
+                                  }`}
+                                />
                               </div>
-                              <div className="text-xs text-gray-500 mt-1">
-                                A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, uma minúscula e um número.
-                              </div>
+                              <span className={`text-xs font-medium ${
+                                passwordStrength === 'weak' ? 'text-red-600' :
+                                passwordStrength === 'medium' ? 'text-yellow-600' :
+                                passwordStrength === 'strong' ? 'text-green-600' : 'text-gray-500'
+                              }`}>
+                                {passwordStrength === 'weak' ? 'Fraca' :
+                                 passwordStrength === 'medium' ? 'Média' :
+                                 passwordStrength === 'strong' ? 'Forte' : ''}
+                              </span>
                             </div>
-                          )}
-                        </div>
-                      )}
+                            <div className="text-xs text-gray-500 mt-1">
+                              A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, uma minúscula e um número.
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Role
                       </label>
-                                             <select
-                         value={editingUser.role || 'comum'}
-                         onChange={(e) => {
-                           const newRole = e.target.value as 'admin' | 'comum';
-                           setEditingUser({...editingUser, role: newRole});
-                           
-                           // Se mudou para comum, desmarcar módulos admin-only
-                           if (newRole === 'comum') {
-                             const adminOnlyModulos = modulos.filter(m => m.is_admin_only).map(m => m.id);
-                             setSelectedModulos(prev => prev.filter(id => !adminOnlyModulos.includes(id)));
-                           }
-                         }}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       >
+                      <select
+                        value={editingUser.role || 'comum'}
+                        onChange={(e) => {
+                          const newRole = e.target.value as 'admin' | 'comum';
+                          setEditingUser({...editingUser, role: newRole});
+                          
+                          if (newRole === 'comum') {
+                            const adminOnlyModulos = modulos.filter(m => m.is_admin_only).map(m => m.id);
+                            setSelectedModulos(prev => prev.filter(id => !adminOnlyModulos.includes(id)));
+                          }
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
                         <option value="comum">Usuário Comum</option>
                         <option value="admin">Administrador</option>
                       </select>
@@ -704,34 +768,34 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
                         Módulos
                       </label>
                       <div className="max-h-32 overflow-y-auto space-y-2">
-                                                 {modulos.map((modulo) => {
-                           const isDisabled = editingUser.role === 'comum' && modulo.is_admin_only;
-                           return (
-                             <label key={modulo.id} className={`flex items-center ${isDisabled ? 'opacity-50' : ''}`}>
-                               <input
-                                 type="checkbox"
-                                 checked={selectedModulos.includes(modulo.id)}
-                                 disabled={isDisabled}
-                                 onChange={(e) => {
-                                   if (e.target.checked) {
-                                     setSelectedModulos([...selectedModulos, modulo.id]);
-                                   } else {
-                                     setSelectedModulos(selectedModulos.filter(id => id !== modulo.id));
-                                   }
-                                 }}
-                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
-                               />
-                               <span className={`ml-2 text-sm ${isDisabled ? 'text-gray-400' : 'text-gray-700'}`}>
-                                 {modulo.nome}
-                               </span>
-                               {modulo.is_admin_only && (
-                                 <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                   Admin
-                                 </span>
-                               )}
-                             </label>
-                           );
-                         })}
+                        {modulos.map((modulo) => {
+                          const isDisabled = editingUser.role === 'comum' && modulo.is_admin_only;
+                          return (
+                            <label key={modulo.id} className={`flex items-center ${isDisabled ? 'opacity-50' : ''}`}>
+                              <input
+                                type="checkbox"
+                                checked={selectedModulos.includes(modulo.id)}
+                                disabled={isDisabled}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedModulos([...selectedModulos, modulo.id]);
+                                  } else {
+                                    setSelectedModulos(selectedModulos.filter(id => id !== modulo.id));
+                                  }
+                                }}
+                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
+                              />
+                              <span className={`ml-2 text-sm ${isDisabled ? 'text-gray-400' : 'text-gray-700'}`}>
+                                {modulo.nome}
+                              </span>
+                              {modulo.is_admin_only && (
+                                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                  Admin
+                                </span>
+                              )}
+                            </label>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -755,99 +819,99 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
               </div>
             </div>
           </div>
-                 )}
+        )}
 
-         {/* Modal de Reset de Senha */}
-         {showResetPasswordModal && resetPasswordUser && (
-           <div className="fixed inset-0 z-50 overflow-y-auto">
-             <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-               <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={() => setShowResetPasswordModal(false)} />
-               
-               <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                 <div className="flex items-center justify-between mb-6">
-                   <h3 className="text-lg font-medium text-gray-900">
-                     Resetar Senha
-                   </h3>
-                   <button
-                     onClick={() => setShowResetPasswordModal(false)}
-                     className="text-gray-400 hover:text-gray-600"
-                   >
-                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                     </svg>
-                   </button>
-                 </div>
+        {/* Modal de Reset de Senha */}
+        {showResetPasswordModal && resetPasswordUser && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={() => setShowResetPasswordModal(false)} />
+              
+              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Resetar Senha
+                  </h3>
+                  <button
+                    onClick={() => setShowResetPasswordModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
 
-                 <div className="mb-6">
-                   <p className="text-sm text-gray-600 mb-4">
-                     Tem certeza que deseja resetar a senha do usuário <strong>{resetPasswordUser.full_name}</strong>?
-                   </p>
-                   <p className="text-sm text-gray-500">
-                     Uma nova senha será gerada automaticamente e exibida após a confirmação.
-                   </p>
-                 </div>
+                <div className="mb-6">
+                  <p className="text-sm text-gray-600 mb-4">
+                    Tem certeza que deseja resetar a senha do usuário <strong>{resetPasswordUser.full_name}</strong>?
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Uma nova senha será gerada automaticamente e exibida após a confirmação.
+                  </p>
+                </div>
 
-                 {newPassword && (
-                   <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                     <h4 className="text-sm font-medium text-green-800 mb-2">Nova Senha Gerada:</h4>
-                     <div className="flex items-center space-x-2">
-                       <input
-                         type="text"
-                         value={newPassword}
-                         readOnly
-                         className="flex-1 px-3 py-2 border border-green-300 rounded-lg bg-white text-green-800 font-mono text-sm"
-                       />
-                       <button
-                         onClick={() => {
-                           navigator.clipboard.writeText(newPassword);
-                           setToast({ message: 'Senha copiada para a área de transferência!', type: 'success' });
-                         }}
-                         className="px-3 py-2 text-sm font-medium text-green-700 bg-green-100 border border-green-300 rounded-lg hover:bg-green-200"
-                       >
-                         Copiar
-                       </button>
-                     </div>
-                   </div>
-                 )}
+                {newPassword && (
+                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <h4 className="text-sm font-medium text-green-800 mb-2">Nova Senha Gerada:</h4>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={newPassword}
+                        readOnly
+                        className="flex-1 px-3 py-2 border border-green-300 rounded-lg bg-white text-green-800 font-mono text-sm"
+                      />
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(newPassword);
+                          setToast({ message: 'Senha copiada para a área de transferência!', type: 'success' });
+                        }}
+                        className="px-3 py-2 text-sm font-medium text-green-700 bg-green-100 border border-green-300 rounded-lg hover:bg-green-200"
+                      >
+                        Copiar
+                      </button>
+                    </div>
+                  </div>
+                )}
 
-                 <div className="flex justify-end space-x-3">
-                   <button
-                     onClick={() => {
-                       setShowResetPasswordModal(false);
-                       setNewPassword('');
-                       setResetPasswordUser(null);
-                     }}
-                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                   >
-                     Cancelar
-                   </button>
-                   {!newPassword && (
-                     <button
-                       onClick={confirmResetPassword}
-                       className="px-4 py-2 text-sm font-medium text-white bg-orange-600 border border-transparent rounded-md hover:bg-orange-700"
-                     >
-                       Resetar Senha
-                     </button>
-                   )}
-                 </div>
-               </div>
-             </div>
-           </div>
-         )}
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => {
+                      setShowResetPasswordModal(false);
+                      setNewPassword('');
+                      setResetPasswordUser(null);
+                    }}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                  >
+                    Cancelar
+                  </button>
+                  {!newPassword && (
+                    <button
+                      onClick={confirmResetPassword}
+                      className="px-4 py-2 text-sm font-medium text-white bg-orange-600 border border-transparent rounded-md hover:bg-orange-700"
+                    >
+                      Resetar Senha
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
-         {/* Modal de Confirmação */}
-         <ConfirmModal
-           isOpen={confirmModal.isOpen}
-           onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
-           onConfirm={confirmModal.onConfirm}
-           title={confirmModal.title}
-           message={confirmModal.message}
-           confirmText="Confirmar"
-           cancelText="Cancelar"
-           type={confirmModal.type}
-         />
+        {/* Modal de Confirmação */}
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+          onConfirm={confirmModal.onConfirm}
+          title={confirmModal.title}
+          message={confirmModal.message}
+          confirmText="Confirmar"
+          cancelText="Cancelar"
+          type={confirmModal.type}
+        />
 
-         {/* Toast de Notificação */}
+                 {/* Toast de Notificação */}
          {toast && (
            <Toast
              message={toast.message}
@@ -857,7 +921,8 @@ const AdminPanel: React.FC<AdminPanelProps> = () => {
          )}
        </main>
      </div>
-   );
- };
+   </>
+ );
+};
 
 export default AdminPanel; 
