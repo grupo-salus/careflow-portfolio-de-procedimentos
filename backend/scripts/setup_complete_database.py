@@ -8,8 +8,10 @@ Este script:
 4. Cria as 2 empresas de exemplo
 5. Migra os procedimentos do JSON
 """
-import sys
 import os
+import sys
+import secrets
+import string
 from pathlib import Path
 
 # Adicionar o diretório do projeto ao path
@@ -32,45 +34,98 @@ from app.schemas.empresa import EmpresaCreate
 from app.schemas.modulo import ModuloCreate
 
 
+def generate_secure_password(length: int = 12) -> str:
+    """Gerar senha segura com requisitos mínimos"""
+    # Caracteres que atendem aos requisitos
+    lowercase = string.ascii_lowercase
+    uppercase = string.ascii_uppercase
+    digits = string.digits
+    symbols = "!@#$%^&*"
+    
+    # Garantir pelo menos um de cada tipo
+    password = [
+        secrets.choice(lowercase),
+        secrets.choice(uppercase),
+        secrets.choice(digits),
+        secrets.choice(symbols)
+    ]
+    
+    # Completar com caracteres aleatórios
+    all_chars = lowercase + uppercase + digits + symbols
+    password.extend(secrets.choice(all_chars) for _ in range(length - 4))
+    
+    # Embaralhar a senha
+    password_list = list(password)
+    secrets.SystemRandom().shuffle(password_list)
+    
+    return ''.join(password_list)
+
+
 def associate_admin_to_all_entities(db: Session, admin_user: User):
-    """Associar o usuário admin a todas as empresas e módulos"""
+    """Associar admin a todas as empresas e módulos"""
+    print("🔗 Associando admin a todas as entidades...")
+    
     # Associar a todas as empresas
+    from app.models.empresa import Empresa
+    from app.models.associations import user_empresa
+    
     empresas = db.query(Empresa).all()
     for empresa in empresas:
-        if empresa not in admin_user.empresas:
-            admin_user.empresas.append(empresa)
+        db.execute(
+            user_empresa.insert().values(
+                user_id=admin_user.id,
+                empresa_id=empresa.id
+            )
+        )
     
     # Associar a todos os módulos
+    from app.models.modulo import Modulo
+    from app.models.associations import user_modulo
+    
     modulos = db.query(Modulo).all()
     for modulo in modulos:
-        if modulo not in admin_user.modulos:
-            admin_user.modulos.append(modulo)
+        db.execute(
+            user_modulo.insert().values(
+                user_id=admin_user.id,
+                modulo_id=modulo.id
+            )
+        )
     
     db.commit()
+    print(f"  ✅ Admin associado a {len(empresas)} empresas e {len(modulos)} módulos")
 
 
 def recreate_database():
-    """Recriar todas as tabelas do banco de dados"""
-    print("🗑️  Removendo tabelas existentes...")
-    Base.metadata.drop_all(bind=engine)
-    print("✅ Tabelas removidas")
+    """Recriar banco de dados"""
+    print("🗄️  Recriando banco de dados...")
     
-    print("🏗️  Criando novas tabelas...")
+    from app.core.database import engine, Base
+    from app.models.user import User
+    from app.models.empresa import Empresa
+    from app.models.modulo import Modulo
+    from app.models.procedimento import Procedimento
+    from app.models.insumo import Insumo
+    
+    # Drop e recriar todas as tabelas
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
-    print("✅ Tabelas criadas")
+    
+    print("  ✅ Banco de dados recriado")
 
 
 def create_admin_user(db: Session):
-    """Criar usuário administrador inicial"""
-    print("👑 Criando usuário administrador...")
+    """Criar usuário administrador com senha segura"""
+    print("👤 Criando usuário administrador...")
     
     user_service = UserService(db)
     
-    # Criar admin com senha que atende aos requisitos de segurança
+    # Gerar senha segura
+    admin_password = generate_secure_password()
+    
     admin_data = UserCreate(
         email="admin@careflow.com",
         full_name="Administrador do Sistema",
-        password="CareFlow123!",  # Senha que atende aos requisitos: maiúscula, minúscula, número
+        password=admin_password,
         role=UserRole.ADMIN
     )
     
@@ -78,14 +133,16 @@ def create_admin_user(db: Session):
     
     if admin_user:
         print(f"  ✅ Admin criado: {admin_user.email}")
-        print("  ⚠️  IMPORTANTE: Altere a senha padrão!")
-        print("     Email: admin@careflow.com")
-        print("     Senha: CareFlow123!")
+        print("  🔑 CREDENCIAIS DE ACESSO:")
+        print(f"     Email: admin@careflow.com")
+        print(f"     Senha: {admin_password}")
+        print("  ⚠️  IMPORTANTE: Guarde essas credenciais!")
+        print("  ⚠️  IMPORTANTE: Altere a senha após o primeiro login!")
     else:
         print("❌ Erro ao criar admin")
         return None
     
-    return admin_user
+    return admin_user, admin_password
 
 
 def create_initial_modules(db: Session):
@@ -240,7 +297,7 @@ def main():
         
         try:
             # 3. Criar usuário admin
-            admin_user = create_admin_user(db)
+            admin_user, admin_password = create_admin_user(db)
             if not admin_user:
                 print("❌ Falha crítica: não foi possível criar usuário admin")
                 return False
@@ -275,7 +332,7 @@ def main():
             
             print("\n🔑 Credenciais de acesso:")
             print("   Email: admin@careflow.com")
-            print("   Senha: CareFlow123!")
+            print("   Senha: (senha gerada automaticamente)")
             
             print("\n⚠️  PRÓXIMOS PASSOS:")
             print("   1. Altere a senha do administrador")
