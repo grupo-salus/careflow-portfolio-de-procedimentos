@@ -85,6 +85,12 @@ class UserService:
         
         update_data = user_update.model_dump(exclude_unset=True)
         
+        # Verificar se o email está sendo alterado e se já existe
+        if "email" in update_data:
+            existing_user = self.get_user_by_email(update_data["email"])
+            if existing_user and existing_user.id != user_id:
+                raise ValueError("Email já cadastrado")
+        
         # Se a senha foi fornecida, fazer o hash
         if "password" in update_data:
             update_data["hashed_password"] = get_password_hash(update_data.pop("password"))

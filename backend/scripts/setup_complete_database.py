@@ -67,12 +67,12 @@ def associate_admin_to_all_entities(db: Session, admin_user: User):
     
     # Associar a todas as empresas
     from app.models.empresa import Empresa
-    from app.models.associations import user_empresa
+    from app.models.associations import usuario_empresas
     
     empresas = db.query(Empresa).all()
     for empresa in empresas:
         db.execute(
-            user_empresa.insert().values(
+            usuario_empresas.insert().values(
                 user_id=admin_user.id,
                 empresa_id=empresa.id
             )
@@ -80,12 +80,12 @@ def associate_admin_to_all_entities(db: Session, admin_user: User):
     
     # Associar a todos os módulos
     from app.models.modulo import Modulo
-    from app.models.associations import user_modulo
+    from app.models.associations import usuario_modulos
     
     modulos = db.query(Modulo).all()
     for modulo in modulos:
         db.execute(
-            user_modulo.insert().values(
+            usuario_modulos.insert().values(
                 user_id=admin_user.id,
                 modulo_id=modulo.id
             )

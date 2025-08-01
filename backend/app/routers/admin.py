@@ -70,6 +70,14 @@ def criar_usuario_admin(
     """
     user_service = UserService(db)
     
+    # Verificar se usuário já existe
+    existing_user = user_service.get_user_by_email(user_create.email)
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email já cadastrado"
+        )
+    
     # Criar usuário
     created_user = user_service.create_user(user_create, setup_default_permissions=False)
     if not created_user:
@@ -101,8 +109,19 @@ def atualizar_usuario_admin(
         )
     
     # Atualizar usuário
-    updated_user = user_service.update_user(user_id, user_update)
-    if not updated_user:
+    try:
+        updated_user = user_service.update_user(user_id, user_update)
+        if not updated_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Erro ao atualizar usuário"
+            )
+    except ValueError as e:
+        if "Email já cadastrado" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email já cadastrado"
+            )
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Erro ao atualizar usuário"
@@ -260,10 +279,22 @@ def resetar_senha_usuario_admin(
             detail="Usuário não encontrado"
         )
     
-    # Gerar nova senha aleatória
+    # Gerar nova senha aleatória que atenda aos critérios de validação
     import secrets
     import string
-    new_password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
+    
+    # Garantir que a senha tenha pelo menos uma maiúscula, uma minúscula e um número
+    uppercase = secrets.choice(string.ascii_uppercase)
+    lowercase = secrets.choice(string.ascii_lowercase)
+    digit = secrets.choice(string.digits)
+    
+    # Completar com caracteres aleatórios para chegar a 12 caracteres
+    remaining_chars = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(9))
+    
+    # Combinar e embaralhar
+    password_chars = list(uppercase + lowercase + digit + remaining_chars)
+    secrets.SystemRandom().shuffle(password_chars)
+    new_password = ''.join(password_chars)
     
     # Atualizar senha do usuário
     from ..schemas.user import UserUpdate
